@@ -1,4 +1,1399 @@
-const IDEAL_BLUEPRINTS = [
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Progressive Lift OS — Rohit</title>
+  <style>
+    :root {
+      --bg: #0b0d10;
+      --surface: #13171d;
+      --surface-2: #1a2028;
+      --border: #2a323e;
+      --border-strong: #3d4859;
+      --text: #f3f5f8;
+      --muted: #9aa4b2;
+      --accent: #c8ff00;
+      --accent-text: #0b0d10;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --blue: #38bdf8;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      line-height: 1.45;
+      overflow-anchor: none;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      touch-action: manipulation;
+    }
+
+    @media (max-width: 768px) {
+      input, select, textarea {
+        font-size: 16px !important;
+      }
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 12px 12px 84px;
+    }
+
+    /* Header */
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .logo-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: var(--accent-text);
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-info {
+      min-width: 0;
+    }
+
+    .brand-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.3px;
+    }
+
+    .api-pill {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--amber);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .api-pill.ready {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--green);
+      border-color: rgba(34, 197, 94, 0.4);
+    }
+
+    .api-pill.cloud {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--blue);
+      border-color: rgba(56, 189, 248, 0.4);
+      cursor: pointer;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+      word-break: break-word;
+    }
+
+    .btn-settings {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1.5px solid var(--border-strong);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    /* Summary Cards */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 820px) {
+      .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      min-width: 0;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+    }
+
+    .stat-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--accent);
+      margin: 4px 0 2px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* Main Nav Tabs (4 Tabs) */
+    .main-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .main-tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .main-tab {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 12.5px;
+      padding: 10px 6px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .main-tab.active {
+      background: var(--accent);
+      color: var(--accent-text);
+    }
+
+    /* Day Selector */
+    .day-tabs {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 6px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px;
+      margin-bottom: 12px;
+    }
+
+    .day-tab {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 12px;
+      padding: 9px 4px;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+
+    .day-tab.active {
+      background: var(--accent);
+      color: var(--accent-text);
+    }
+
+    /* Cards & Controls */
+    .card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .section-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 2px 0 0;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn {
+      border: 1.5px solid var(--border-strong);
+      background: var(--surface-2);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--accent-text);
+      border-color: var(--accent);
+    }
+
+    .btn-danger {
+      border-color: rgba(239, 68, 68, 0.45);
+      color: #fca5a5;
+    }
+
+    .chip-btn {
+      border: 1px solid var(--border-strong);
+      background: var(--surface-2);
+      color: var(--muted);
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .chip-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(200, 255, 0, 0.12);
+    }
+
+    /* Checklist */
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .check-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .check-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* Exercise Cards */
+    .ex-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 13px;
+      margin-bottom: 10px;
+      transition: border-color 0.15s ease;
+    }
+
+    .ex-card.ready-up {
+      border-color: var(--green);
+    }
+
+    .ex-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .ex-slot-tag {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+
+    .ex-name {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .ex-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .alt-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .alt-select {
+      flex: 1 1 220px;
+      min-width: 0;
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1.5px solid var(--border-strong);
+      border-radius: 9px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .alt-select.swapped {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .custom-alt-drawer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px dashed var(--accent);
+      border-radius: 10px;
+      padding: 9px;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-strong);
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .badge.up {
+      background: rgba(34, 197, 94, 0.16);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .badge.hold {
+      background: rgba(245, 158, 11, 0.16);
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .weight-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+    }
+
+    .stepper-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .step-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .num-input {
+      width: 68px;
+      height: 34px;
+      text-align: center;
+      border-radius: 8px;
+      border: 1.5px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .sets-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 640px) {
+      .sets-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .set-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 7px 10px;
+    }
+
+    .set-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .rep-input {
+      width: 54px;
+      height: 32px;
+      text-align: center;
+      border-radius: 8px;
+      border: 1.5px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 800;
+    }
+
+    /* Session Feedback Gate + Written Note */
+    .feedback-bar {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .fb-btn {
+      border: 1.5px solid var(--border-strong);
+      background: var(--surface-2);
+      color: var(--muted);
+      border-radius: 9px;
+      padding: 7px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .fb-btn.active-smooth {
+      border-color: var(--green);
+      background: rgba(34, 197, 94, 0.16);
+      color: var(--green);
+    }
+
+    .fb-btn.active-hard {
+      border-color: var(--amber);
+      background: rgba(245, 158, 11, 0.16);
+      color: var(--amber);
+    }
+
+    .fb-btn.active-grind {
+      border-color: var(--red);
+      background: rgba(239, 68, 68, 0.16);
+      color: #fca5a5;
+    }
+
+    .fb-note-input {
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 9px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    /* Digital Transformation Diary Timeline */
+    .timeline-card {
+      position: relative;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 13px 14px;
+      margin-bottom: 10px;
+    }
+
+    .tl-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .tl-day-badge {
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: 0.3px;
+    }
+
+    .tl-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+
+    .tl-pill {
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 7px;
+      color: var(--muted);
+    }
+
+    .tl-lifts {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 10px;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    /* Ideal Plan Matcher */
+    .blueprint-box {
+      background: var(--surface-2);
+      border: 1.5px solid var(--border-strong);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .match-meters {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    @media (max-width: 640px) {
+      .match-meters {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .meter-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 10px;
+    }
+
+    .meter-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .meter-track {
+      height: 7px;
+      background: var(--surface-2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width 0.2s ease;
+    }
+
+    .bp-slot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+
+    /* Charts & Analytics Grid */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 740px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 13px;
+      min-width: 0;
+    }
+
+    .chart-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .chart-title {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .chart-kpi {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .svg-wrap {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 6px 4px;
+    }
+
+    .svg-wrap svg {
+      width: 100%;
+      height: 155px;
+      display: block;
+      overflow: visible;
+    }
+
+    /* Offline Food Calculator */
+    .calc-box {
+      background: var(--surface-2);
+      border: 1.5px solid var(--border-strong);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .calc-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .calc-preview {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+
+    /* Nutrition & Snap Food */
+    .fat-pills {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .fat-pill {
+      border: 1.5px solid var(--border-strong);
+      background: var(--surface-2);
+      color: var(--muted);
+      border-radius: 10px;
+      padding: 8px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .fat-pill.active {
+      border-color: var(--accent);
+      background: rgba(200, 255, 0, 0.12);
+      color: var(--accent);
+    }
+
+    .textarea {
+      width: 100%;
+      min-height: 70px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--text);
+      padding: 10px;
+      resize: vertical;
+      margin-bottom: 10px;
+    }
+
+    .photo-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .file-btn-wrap {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: var(--surface-2);
+      border: 1.5px solid var(--border-strong);
+      border-radius: 10px;
+      padding: 10px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .file-btn-wrap input[type="file"] {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .status-banner {
+      font-size: 12px;
+      padding: 9px 11px;
+      border-radius: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-strong);
+      color: var(--muted);
+      margin-top: 8px;
+      display: none;
+    }
+
+    .status-banner.show {
+      display: block;
+    }
+
+    .meal-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 11px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .manual-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .manual-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Pull-up Stages */
+    .stage-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .stage-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stage-card {
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 11px;
+      cursor: pointer;
+    }
+
+    .stage-card.active {
+      border-color: var(--accent);
+      background: rgba(200, 255, 0, 0.08);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--surface);
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      margin: 10px 0 4px;
+    }
+
+    .text-input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 9px;
+      border: 1.5px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Header -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo-box">PL//OS</div>
+        <div class="brand-info">
+          <div class="brand-title-row">
+            <span class="brand-title">PROGRESSIVE LIFT OS</span>
+            <span id="apiStatusPill" class="api-pill">AI KEY NEEDED</span>
+            <span id="cloudStatusPill" class="api-pill cloud" onclick="syncWithGist(true)" title="Tap to sync across phone & desktop">☁️ LOCAL ONLY</span>
+          </div>
+          <div class="brand-sub">Rohit (28, 178cm) • Recomp 88.7→82.5kg • 30 Pull-Ups (Feb '28)</div>
+        </div>
+      </div>
+      <button class="btn-settings" onclick="openSettings()">⚙️ Settings & Sync</button>
+    </header>
+
+    <!-- Summary Strip -->
+    <section class="summary-grid">
+      <div class="stat-card">
+        <div class="stat-label">7-Day Rolling Avg</div>
+        <div class="stat-val" id="statWeight">87.2 kg</div>
+        <div class="stat-sub" id="statWeightSub">Start: 88.7 kg • Goal: 82.5 kg</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Today's Calories</div>
+        <div class="stat-val" id="statKcal">0 / 2300</div>
+        <div class="stat-sub" id="statKcalSub">2300 kcal left</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Today's Protein</div>
+        <div class="stat-val" id="statProt">0 / 185g</div>
+        <div class="stat-sub" id="statProtSub">185g needed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pull-Up Stage</div>
+        <div class="stat-val" id="statStage">Stage 4</div>
+        <div class="stat-sub" id="statSteps">Steps: 0 / 10k</div>
+      </div>
+    </section>
+
+    <!-- Main Navigation (4 Tabs including Dedicated Journey Diary) -->
+    <nav class="main-tabs">
+      <button class="main-tab active" data-tab="workout" onclick="switchMainTab('workout')">🏋️ PPLUL Tracker</button>
+      <button class="main-tab" data-tab="nutrition" onclick="switchMainTab('nutrition')">🥗 Ideal Plan & Food</button>
+      <button class="main-tab" data-tab="recomp" onclick="switchMainTab('recomp')">📊 Graphs & Recomp</button>
+      <button class="main-tab" data-tab="diary" onclick="switchMainTab('diary')">📓 Journey Diary</button>
+    </nav>
+
+    <!-- TAB 1: WORKOUT -->
+    <main id="tab-workout">
+      <div class="day-tabs" id="dayTabs">
+        <button class="day-tab active" data-day="mon" onclick="switchDay('mon')">MON</button>
+        <button class="day-tab" data-day="tue" onclick="switchDay('tue')">TUE</button>
+        <button class="day-tab" data-day="wed" onclick="switchDay('wed')">WED</button>
+        <button class="day-tab" data-day="thu" onclick="switchDay('thu')">THU</button>
+        <button class="day-tab" data-day="fri" onclick="switchDay('fri')">FRI</button>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title" id="dayTitle">Thursday — Upper (Strength & Pull-Up Volume)</h2>
+            <p class="section-sub" id="dayFocus">Rate feel + write quick exercise feedback • Tap "✅ Finish & Save to Diary" after your session</p>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="archiveSession()">✅ Finish & Save to Diary</button>
+            <button class="btn" onclick="copyDayLog()">Copy Log</button>
+          </div>
+        </div>
+
+        <div class="field-label">Warm-Up & Prehab (Rotator Cuff / Mobility)</div>
+        <div class="check-grid" id="warmupList"></div>
+
+        <div class="field-label" style="margin-top:12px;">Cooldown & Recovery</div>
+        <div class="check-grid" id="cooldownList"></div>
+      </div>
+
+      <div id="exercisesContainer"></div>
+    </main>
+
+    <!-- TAB 2: IDEAL PLAN MATCHER, NUTRITION & SNAP FOOD -->
+    <main id="tab-nutrition" class="hidden">
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">🎯 Ideal Recomp Blueprint & Live Match</h2>
+            <p class="section-sub">Pre-Workout → Post-Workout Breakfast → Lunch → Evening Chicken → Light Dinner</p>
+          </div>
+        </div>
+
+        <div class="blueprint-box">
+          <select id="blueprintSelect" class="text-input" onchange="renderIdealBlueprint()"></select>
+          <div class="match-meters" id="blueprintMeters"></div>
+          <div class="field-label" style="margin-top:6px;">Ideal Meal Slots (Tap "+ Log" to Match Today)</div>
+          <div id="blueprintSlotsList"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Offline Food & Gram Calculator (No AI Needed)</h2>
+            <p class="section-sub">Select any staple, enter exact grams / pieces / scoops, and log instantly</p>
+          </div>
+        </div>
+
+        <div class="calc-box">
+          <div class="calc-grid">
+            <div>
+              <label class="field-label" style="margin-top:0;">Select Food Item</label>
+              <select id="foodDbSelect" class="text-input" onchange="onFoodSelectChange()"></select>
+            </div>
+            <div>
+              <label class="field-label" id="foodQtyLabel" style="margin-top:0;">Amount (grams)</label>
+              <div style="display:flex; gap:6px;">
+                <input id="foodQtyInput" class="text-input" type="number" step="1" value="100" oninput="updateFoodCalcPreview()" />
+                <button type="button" class="btn" style="padding:6px 9px;" onclick="bumpFoodQty(50)">+50</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="calc-preview">
+            <div id="foodCalcSummary" style="font-weight:800; color:var(--accent);">100g • 120 kcal • 24g P • 3g C • 1.5g F</div>
+            <button type="button" class="btn btn-primary" onclick="logCalculatedFood()">+ Log Food</button>
+          </div>
+        </div>
+
+        <div class="manual-row">
+          <input id="manName" class="text-input" placeholder="Custom offline item (e.g. Sprouts 100g)" />
+          <input id="manKcal" class="text-input" type="number" placeholder="kcal" />
+          <input id="manProt" class="text-input" type="number" placeholder="Protein (g)" />
+          <button class="btn" onclick="addManualMeal()">+ Add</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">AI Meal & Snap Food Analyzer (Gemini Vision)</h2>
+            <p class="section-sub">Auto-fallback across Gemini models • Indian cooking oil/ghee multiplier</p>
+          </div>
+        </div>
+
+        <div class="field-label">1. Cooking Fat / Oil Multiplier (Fixes Hidden Calorie Leaks)</div>
+        <div class="fat-pills" id="fatPills">
+          <button class="fat-pill active" data-fat="0" onclick="setFatMode(0)">Home / Low-Oil (+0 kcal)</button>
+          <button class="fat-pill" data-fat="45" onclick="setFatMode(45)">Normal Tadka (+45 kcal)</button>
+          <button class="fat-pill" data-fat="135" onclick="setFatMode(135)">Restaurant / Ghee (+135 kcal)</button>
+        </div>
+
+        <div class="field-label">2. Describe Mixed Meal OR Snap / Upload Photo</div>
+        <textarea id="mealPrompt" class="textarea" placeholder="e.g., 3 ghee roti, green moong curry, 1 katori dahi"></textarea>
+
+        <div class="photo-actions">
+          <label class="file-btn-wrap">
+            📷 Snap Photo (Camera)
+            <input type="file" accept="image/*" capture="environment" onchange="handleFoodImage(event)" />
+          </label>
+          <label class="file-btn-wrap">
+            🖼️ Upload Photo (Gallery)
+            <input type="file" accept="image/*" onchange="handleFoodImage(event)" />
+          </label>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="analyzeTextMeal()">✨ Analyze & Log with AI</button>
+        </div>
+
+        <div id="foodStatus" class="status-banner"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <h3 class="section-title">Today's Logged Meals</h3>
+          <button class="btn btn-danger" onclick="clearTodayMeals()">Clear Today</button>
+        </div>
+        <div id="mealsList"></div>
+      </div>
+    </main>
+
+    <!-- TAB 3: GRAPHS, RECOMP & PULL-UPS -->
+    <main id="tab-recomp" class="hidden">
+      <div class="card">
+        <h2 class="section-title">Daily & Backfill Weigh-In / Step Counter</h2>
+        <p class="section-sub">Log today's numbers or pick any previous date to backfill missed steps/weight</p>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:10px;">
+          <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:10px;">
+            <label class="field-label" style="margin-top:0;">Morning Fasted Weight (kg)</label>
+            <div style="display:flex; gap:6px; margin-bottom:6px;">
+              <input id="weightDateInput" class="text-input" type="date" style="flex:1;" />
+              <input id="weightInput" class="text-input" type="number" step="0.1" placeholder="87.2" style="width:92px;" />
+            </div>
+            <button class="btn btn-primary" style="width:100%;" onclick="logWeight()">Log Weight for Date</button>
+          </div>
+
+          <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:4px; margin-bottom:6px;">
+              <label class="field-label" style="margin:0;">Step Count Date</label>
+              <div style="display:flex; gap:4px;">
+                <button type="button" class="chip-btn" onclick="setStepsDateOffset(0)">Today</button>
+                <button type="button" class="chip-btn" onclick="setStepsDateOffset(-1)">Yesterday</button>
+                <button type="button" class="chip-btn" onclick="setStepsDateOffset(-2)">-2d</button>
+              </div>
+            </div>
+            <div style="display:flex; gap:6px; margin-bottom:6px;">
+              <input id="stepsDateInput" class="text-input" type="date" style="flex:1;" onchange="onStepsDateChange()" />
+              <input id="stepsInput" class="text-input" type="number" step="100" placeholder="10000" style="width:102px;" />
+            </div>
+            <button class="btn btn-primary" style="width:100%;" onclick="logSteps()">Save Steps for Selected Date</button>
+          </div>
+        </div>
+
+        <div id="recentStepsLog" style="margin-top:10px; display:flex; flex-wrap:wrap; gap:6px;"></div>
+      </div>
+
+      <!-- 1. Lift Progression Graph (Full Width) -->
+      <div class="chart-card" style="margin-bottom:12px;">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">🏋️ Strength Progression Graph (Load kg per Exercise)</div>
+            <div class="section-sub">Shows archived progression + current active load</div>
+          </div>
+          <span class="chart-kpi" id="liftChartKpi">20 kg</span>
+        </div>
+        <select id="liftChartSelect" class="text-input" style="margin-bottom:8px;" onchange="renderAllCharts()"></select>
+        <div class="svg-wrap" id="chartLiftWrap"></div>
+      </div>
+
+      <!-- 2x2 Analytics Grid -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">⚖️ Fasted Bodyweight Trend</span>
+            <span class="chart-kpi" id="weightChartKpi">87.2 kg</span>
+          </div>
+          <div class="svg-wrap" id="chartWeightWrap"></div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">🔥 Daily Calories vs Target (14d)</span>
+            <span class="chart-kpi" id="kcalChartKpi">Target: 2300</span>
+          </div>
+          <div class="svg-wrap" id="chartKcalWrap"></div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">🥩 Daily Protein vs Floor (14d)</span>
+            <span class="chart-kpi" id="protChartKpi">Floor: 185g</span>
+          </div>
+          <div class="svg-wrap" id="chartProtWrap"></div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">👟 Daily Step Count vs 10k (14d)</span>
+            <span class="chart-kpi" id="stepsChartKpi">Goal: 10,000</span>
+          </div>
+          <div class="svg-wrap" id="chartStepsWrap"></div>
+        </div>
+      </div>
+
+      <!-- 4-Stage Pull-Up Roadmap -->
+      <div class="card">
+        <h2 class="section-title">4-Stage Pull-Up Roadmap (Target: 30 Strict by Feb 28, 2028)</h2>
+        <p class="section-sub">Tap your active stage below</p>
+        <div class="stage-grid" id="stageGrid" style="margin-top:10px;"></div>
+      </div>
+
+      <!-- AI Coach Audit -->
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">AI Recomp & Strength Coach Audit</h2>
+            <p class="section-sub">Analyzes your 7-day weight trend, protein consistency, and lift feedback</p>
+          </div>
+          <button class="btn btn-primary" onclick="runAiCoach()">🧠 Run Weekly Audit</button>
+        </div>
+        <div id="coachOutput" style="white-space:pre-wrap; font-size:13px; color:var(--text); background:var(--surface-2); padding:12px; border-radius:10px; border:1px solid var(--border);">Tap "Run Weekly Audit" after saving your Google AI Studio API key in Settings & Sync.</div>
+      </div>
+    </main>
+
+    <!-- TAB 4: DEDICATED DIGITAL TRANSFORMATION DIARY -->
+    <main id="tab-diary" class="hidden">
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">📓 Digital Transformation Diary (Day 1 → Goal 82.5 kg)</h2>
+            <p class="section-sub">Every weigh-in, workout, exercise feedback note, meal log & daily reflection woven into your story</p>
+          </div>
+          <button class="btn" onclick="copyFullStory()">📋 Copy Full Story</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr 2fr; gap:8px; margin-bottom:8px;">
+          <input id="diaryDateInput" class="text-input" type="date" />
+          <select id="diaryMood" class="text-input">
+            <option value="🔥 Smooth & Locked In">🔥 Smooth & Locked In</option>
+            <option value="✅ Steady / Normal Day">✅ Steady / Normal Day</option>
+            <option value="⚡ Hard Push / Sore">⚡ Hard Push / Sore</option>
+            <option value="😴 Low Sleep / Office Day">😴 Low Sleep / Office Day</option>
+          </select>
+          <input id="diaryVideoLink" class="text-input" placeholder="Optional Google Photos / Drive form-check video URL" />
+        </div>
+
+        <textarea id="diaryNote" class="textarea" style="min-height:64px;" placeholder="Write today's story (e.g., Day 12 — Hit 87.2 kg fasted! Bench press felt super smooth at 20kg, kept protein above 185g)..."></textarea>
+        <button class="btn btn-primary" onclick="saveDiaryEntry()">+ Add Reflection to Diary</button>
+      </div>
+
+      <!-- Unified Chronological Story Timeline -->
+      <div id="journeyTimeline"></div>
+    </main>
+  </div>
+
+  <!-- SETTINGS & CLOUD SYNC MODAL -->
+  <div id="settingsModal" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="section-head">
+        <h3 class="section-title">Settings, Cross-Device Sync & AI</h3>
+        <button class="btn" onclick="closeSettings()">✕</button>
+      </div>
+
+      <div style="background:var(--surface-2); border:1px solid var(--border-strong); border-radius:10px; padding:10px; margin-bottom:10px;">
+        <div style="font-weight:800; font-size:13px; color:var(--blue);">☁️ 2-Way Phone ↔ Desktop Sync (Private GitHub Gist)</div>
+        <div style="font-size:11px; color:var(--muted); margin-top:2px;">Enter the same Gist ID & Token on phone and laptop so both stay synced automatically.</div>
+
+        <label class="field-label">GitHub Gist ID</label>
+        <input id="cfgGistId" class="text-input" placeholder="e.g. a1b2c3d4e5f67890..." />
+
+        <label class="field-label">GitHub Personal Access Token (gist scope)</label>
+        <input id="cfgGistToken" class="text-input" type="password" placeholder="ghp_..." />
+
+        <div class="btn-row" style="margin-top:8px;">
+          <button type="button" class="btn" onclick="syncWithGist(true)">🔄 Sync Now (Pull & Push)</button>
+        </div>
+        <div id="syncDiag" style="font-size:11px; color:var(--muted); margin-top:6px;"></div>
+      </div>
+
+      <label class="field-label">Google AI Studio API Key</label>
+      <input id="cfgApiKey" class="text-input" type="password" placeholder="AIzaSy..." />
+
+      <label class="field-label">Primary Gemini Model (Auto-Fallbacks on High Demand)</label>
+      <select id="cfgModel" class="text-input">
+        <option value="gemini-2.5-flash">gemini-2.5-flash (Recommended & Stable)</option>
+        <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite (Fast Free Tier)</option>
+        <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite (Backup Pool)</option>
+      </select>
+
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px;">
+        <div>
+          <label class="field-label">Target kcal</label>
+          <input id="cfgKcal" class="text-input" type="number" />
+        </div>
+        <div>
+          <label class="field-label">Protein (g)</label>
+          <input id="cfgProt" class="text-input" type="number" />
+        </div>
+        <div>
+          <label class="field-label">Goal kg</label>
+          <input id="cfgGoalKg" class="text-input" type="number" step="0.1" />
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:14px;">
+        <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+        <button class="btn" onclick="exportBackup()">⬇️ Export JSON</button>
+        <label class="btn" style="cursor:pointer;">
+          ⬆️ Import JSON
+          <input type="file" accept=".json,application/json" style="display:none;" onchange="importBackup(event)" />
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'progressive_lift_os_v9';
+    const CLOUD_CFG_KEY = 'progressive_lift_cloud_cfg_v1';
+
+    /* Corrected Ideal Daily Recomp Blueprints: Pre-Workout -> Post-Workout Breakfast -> Lunch -> Evening Chicken -> Light Dinner */
+    const IDEAL_BLUEPRINTS = [
       {
         id: 'bp_chicken_home',
         name: 'Ideal Plan A: Home Cooking + 250g Raw Chicken + Eggs + Whey (2,275 kcal | 189g P)',
@@ -42,3 +1437,1899 @@ const IDEAL_BLUEPRINTS = [
         ]
       }
     ];
+
+    const FOOD_DB = [
+      { id: 'whey_scoop', name: 'Nakpro Whey Protein (1 Scoop = 33g)', unit: 'scoops', defaultQty: 1, step: 0.5, kcal: 120, p: 24, c: 3, f: 1.5 },
+      { id: 'whey_gram', name: 'Whey Protein Powder (by grams)', unit: 'g', defaultQty: 33, step: 10, kcal: 364, p: 73, c: 9, f: 4.5, per100: true },
+      { id: 'chicken_raw', name: 'Chicken Breast — Raw Weight (g)', unit: 'g', defaultQty: 250, step: 50, kcal: 165, p: 30, c: 0, f: 3.6, per100: true },
+      { id: 'chicken_cooked', name: 'Chicken Breast — Cooked Weight (g)', unit: 'g', defaultQty: 180, step: 50, kcal: 225, p: 41, c: 0, f: 5.0, per100: true },
+      { id: 'whole_egg', name: 'Whole Boiled / Omelette Egg', unit: 'eggs', defaultQty: 4, step: 1, kcal: 78, p: 6.3, c: 0.6, f: 5.3 },
+      { id: 'egg_white', name: 'Egg Whites (Large)', unit: 'whites', defaultQty: 6, step: 1, kcal: 17, p: 3.6, c: 0.2, f: 0.1 },
+      { id: 'paneer_std', name: 'Paneer — Regular (g)', unit: 'g', defaultQty: 100, step: 25, kcal: 265, p: 18.3, c: 1.2, f: 20.8, per100: true },
+      { id: 'paneer_lowfat', name: 'Low-Fat High-Protein Paneer (g)', unit: 'g', defaultQty: 100, step: 25, kcal: 175, p: 25, c: 3, f: 7, per100: true },
+      { id: 'curd', name: 'Dahi / Curd — Home / Nandini (g)', unit: 'g', defaultQty: 200, step: 50, kcal: 62, p: 3.5, c: 4.7, f: 3.1, per100: true },
+      { id: 'greek_yogurt', name: 'Greek Yogurt / Skyr (g)', unit: 'g', defaultQty: 100, step: 50, kcal: 90, p: 10, c: 5, f: 2.5, per100: true },
+      { id: 'roti_dry', name: 'Phulka / Chapati (Dry / No Ghee)', unit: 'rotis', defaultQty: 2, step: 1, kcal: 105, p: 3.5, c: 21, f: 0.6 },
+      { id: 'roti_ghee', name: 'Chapati with Ghee (1 tsp)', unit: 'rotis', defaultQty: 3, step: 1, kcal: 145, p: 3.5, c: 21, f: 5.0 },
+      { id: 'rice_cooked', name: 'Cooked White Rice (g)', unit: 'g', defaultQty: 150, step: 50, kcal: 130, p: 2.7, c: 28, f: 0.3, per100: true },
+      { id: 'dal_cooked', name: 'Cooked Dal / Moong Curry (g)', unit: 'g', defaultQty: 150, step: 50, kcal: 105, p: 6.5, c: 15, f: 2.0, per100: true },
+      { id: 'oats_raw', name: 'Rolled Oats — Dry Weight (g)', unit: 'g', defaultQty: 50, step: 10, kcal: 380, p: 13, c: 67, f: 6.5, per100: true },
+      { id: 'banana_med', name: 'Banana — Medium (Robusta)', unit: 'bananas', defaultQty: 1, step: 1, kcal: 105, p: 1.3, c: 27, f: 0.4 },
+      { id: 'banana_small', name: 'Banana — Small (Yelakki)', unit: 'bananas', defaultQty: 2, step: 1, kcal: 60, p: 0.8, c: 15, f: 0.2 },
+      { id: 'peanut_butter', name: 'Peanut Butter (g)', unit: 'g', defaultQty: 16, step: 8, kcal: 590, p: 25, c: 20, f: 50, per100: true },
+      { id: 'ghee_oil', name: 'Ghee / Cooking Oil (g)', unit: 'g', defaultQty: 5, step: 5, kcal: 900, p: 0, c: 0, f: 100, per100: true },
+      { id: 'egg_dosa', name: 'Local Darshini Egg Dosa (Light Oil)', unit: 'dosas', defaultQty: 1, step: 1, kcal: 260, p: 11, c: 34, f: 8.5 }
+    ];
+
+    const PROGRAM = {
+      mon: {
+        title: 'Monday — Push (Chest, Shoulders, Triceps)',
+        focus: 'Rate feel + write quick exercise feedback • Tap "✅ Finish & Save to Diary" after your session',
+        warmups: [
+          { id: 'mon_w1', text: 'Band/Cable External Rotations (2×15)' },
+          { id: 'mon_w2', text: 'Scapular Wall Slides & Arm Circles (2 mins)' },
+          { id: 'mon_w3', text: 'Empty Bar Bench Press Warm-up (2×12)' },
+          { id: 'mon_w4', text: 'Light DB Lateral Raises (1×15 @ 4kg)' }
+        ],
+        cooldowns: [
+          { id: 'mon_c1', text: 'Doorway Pec Stretch (2×30s)' },
+          { id: 'mon_c2', text: 'Overhead Tricep Stretch (2×30s)' },
+          { id: 'mon_c3', text: 'Chin Tucks / Neck Isometrics (3×10s)' },
+          { id: 'mon_c4', text: 'Log Weights & Hydration Check' }
+        ],
+        slots: [
+          {
+            slotId: 'mon_ex1', pattern: 'Horizontal Chest Press', minReps: 8, maxReps: 12, rest: '150s',
+            note: 'Track plate weight per side (or per hand for DB)',
+            options: [
+              { id: 'mon_ex1', name: 'Flat Barbell Bench Press (Per Side)', defaultWt: 20 },
+              { id: 'mon_ex1_alt1', name: 'Flat Dumbbell Bench Press (Per Hand)', defaultWt: 20 },
+              { id: 'mon_ex1_alt2', name: 'Seated Chest Press Machine', defaultWt: 45 }
+            ]
+          },
+          {
+            slotId: 'mon_ex2', pattern: 'Vertical Overhead Press', minReps: 8, maxReps: 12, rest: '150s',
+            note: 'Keep ribs down, full overhead lockout',
+            options: [
+              { id: 'mon_ex2', name: 'Seated DB Shoulder Press (Per Hand)', defaultWt: 15 },
+              { id: 'mon_ex2_alt1', name: 'Standing Barbell Overhead Press (Per Side)', defaultWt: 10 },
+              { id: 'mon_ex2_alt2', name: 'Machine Shoulder Press', defaultWt: 30 }
+            ]
+          },
+          {
+            slotId: 'mon_ex3', pattern: 'Upper Chest Incline', minReps: 10, maxReps: 15, rest: '120s',
+            note: '2-sec controlled lowering',
+            options: [
+              { id: 'mon_ex3', name: 'Incline DB Press 30° (Per Hand)', defaultWt: 20 },
+              { id: 'mon_ex3_alt1', name: 'Incline Smith / Barbell Press (Per Side)', defaultWt: 15 },
+              { id: 'mon_ex3_alt2', name: 'Low-to-High Cable Flyes', defaultWt: 12.5 }
+            ]
+          },
+          {
+            slotId: 'mon_ex4', pattern: 'Side Delt Isolation', minReps: 12, maxReps: 15, rest: '90s',
+            note: 'Lead with elbows, no momentum',
+            options: [
+              { id: 'mon_ex4', name: 'DB Lateral Raises (Per Hand)', defaultWt: 7.5 },
+              { id: 'mon_ex4_alt1', name: 'Cable Lateral Raises (Single Arm)', defaultWt: 5 },
+              { id: 'mon_ex4_alt2', name: 'Machine Lateral Raise', defaultWt: 20 }
+            ]
+          },
+          {
+            slotId: 'mon_ex5', pattern: 'Tricep Lateral Head', minReps: 12, maxReps: 15, rest: '90s',
+            note: 'Lock elbows tight at sides',
+            options: [
+              { id: 'mon_ex5', name: 'Cable Tricep Pushdowns (Straight/V-Bar)', defaultWt: 30 },
+              { id: 'mon_ex5_alt1', name: 'Cable Rope Tricep Pushdowns', defaultWt: 25 },
+              { id: 'mon_ex5_alt2', name: 'Assisted Tricep Dips', defaultWt: 25 }
+            ]
+          },
+          {
+            slotId: 'mon_ex6', pattern: 'Tricep Long Head Stretch', minReps: 12, maxReps: 15, rest: '90s',
+            note: 'Full stretch behind head',
+            options: [
+              { id: 'mon_ex6', name: 'Overhead Cable Tricep Extension', defaultWt: 37.5 },
+              { id: 'mon_ex6_alt1', name: 'Seated Overhead DB Extension (Two-Hand)', defaultWt: 17.5 },
+              { id: 'mon_ex6_alt2', name: 'EZ-Bar Skullcrushers', defaultWt: 15 }
+            ]
+          }
+        ]
+      },
+      tue: {
+        title: 'Tuesday — Pull (Back, Rear Delts, Biceps)',
+        focus: 'Rate feel + write quick exercise feedback • Tap "✅ Finish & Save to Diary" after your session',
+        warmups: [
+          { id: 'tue_w1', text: 'Dead Hang Scapular Pulls (2×10)' },
+          { id: 'tue_w2', text: 'Band Pull-Aparts (2×15)' },
+          { id: 'tue_w3', text: 'Thoracic Cat-Cow Mobility (10 reps)' }
+        ],
+        cooldowns: [
+          { id: 'tue_c1', text: 'Lat Hang / Child Pose Stretch (2×30s)' },
+          { id: 'tue_c2', text: 'Neck Isometric Holds (3×10s)' }
+        ],
+        slots: [
+          {
+            slotId: 'tue_ex1', pattern: 'Primary Vertical Pull (Pull-Up Goal)', minReps: 8, maxReps: 10, rest: '150s',
+            note: 'Lower counterweight by 2.5-5kg at 3×10 Smooth',
+            options: [
+              { id: 'tue_ex1', name: 'Counterweight Assisted Pull-Ups (Overhand)', defaultWt: 45 },
+              { id: 'tue_ex1_alt1', name: 'Neutral-Grip Assisted Pull-Ups', defaultWt: 30 },
+              { id: 'tue_ex1_alt2', name: 'Strict Pull-Up Negatives (5s Lowering)', defaultWt: 0 }
+            ]
+          },
+          {
+            slotId: 'tue_ex2', pattern: 'Supported Horizontal Row', minReps: 8, maxReps: 12, rest: '120s',
+            note: 'Pause 1s at peak contraction',
+            options: [
+              { id: 'tue_ex2', name: 'Chest-Supported DB Row (Per Hand)', defaultWt: 15 },
+              { id: 'tue_ex2_alt1', name: 'Single-Arm DB Row on Bench', defaultWt: 20 },
+              { id: 'tue_ex2_alt2', name: 'Chest-Supported T-Bar / Machine Row', defaultWt: 30 }
+            ]
+          },
+          {
+            slotId: 'tue_ex3', pattern: 'Secondary Lat Pulldown', minReps: 10, maxReps: 12, rest: '120s',
+            note: 'Drive elbows down to hips',
+            options: [
+              { id: 'tue_ex3', name: 'Lat Pulldown (Wide Grip)', defaultWt: 35 },
+              { id: 'tue_ex3_alt1', name: 'Close Neutral-Grip (V-Bar) Pulldown', defaultWt: 25 },
+              { id: 'tue_ex3_alt2', name: 'Single-Arm Cable Lat Pulldown', defaultWt: 15 }
+            ]
+          },
+          {
+            slotId: 'tue_ex4', pattern: 'Mid-Back Cable Row', minReps: 10, maxReps: 12, rest: '120s',
+            note: 'No lower-back momentum',
+            options: [
+              { id: 'tue_ex4', name: 'Seated Cable Row (Close Grip)', defaultWt: 35 },
+              { id: 'tue_ex4_alt1', name: 'Seated Wide-Grip Cable Row', defaultWt: 25 },
+              { id: 'tue_ex4_alt2', name: 'Inverted Bodyweight Rows', defaultWt: 0 }
+            ]
+          },
+          {
+            slotId: 'tue_ex5', pattern: 'Rear Delt & Scapular Health', minReps: 12, maxReps: 15, rest: '90s',
+            note: 'High-rep upper back stability',
+            options: [
+              { id: 'tue_ex5', name: 'Rear Delt Cable / DB Flyes', defaultWt: 20 },
+              { id: 'tue_ex5_alt1', name: 'Reverse Pec Deck Machine', defaultWt: 25 },
+              { id: 'tue_ex5_alt2', name: 'Rope Cable Face Pulls', defaultWt: 20 }
+            ]
+          },
+          {
+            slotId: 'tue_ex6', pattern: 'Bicep Flexion', minReps: 10, maxReps: 15, rest: '90s',
+            note: 'Full stretch at bottom',
+            options: [
+              { id: 'tue_ex6', name: 'Incline DB Bicep Curls (Per Hand)', defaultWt: 7.5 },
+              { id: 'tue_ex6_alt1', name: 'EZ-Bar Standing Curls', defaultWt: 15 },
+              { id: 'tue_ex6_alt2', name: 'DB Hammer Curls (Per Hand)', defaultWt: 10 }
+            ]
+          }
+        ]
+      },
+      wed: {
+        title: 'Wednesday — Legs & Core (Quads, Hamstrings, Calves)',
+        focus: 'Rate feel + write quick exercise feedback • Tap "✅ Finish & Save to Diary" after your session',
+        warmups: [
+          { id: 'wed_w1', text: '90/90 Hip Switches & Pelvic Tilts (2 mins)' },
+          { id: 'wed_w2', text: 'Bodyweight Deep Squat Hold (2×20s)' },
+          { id: 'wed_w3', text: 'Glute Bridges (2×15)' }
+        ],
+        cooldowns: [
+          { id: 'wed_c1', text: 'Couch Quad & Hip Flexor Stretch (2×30s)' },
+          { id: 'wed_c2', text: 'Hamstring Fold Stretch (2×30s)' }
+        ],
+        slots: [
+          {
+            slotId: 'wed_ex1', pattern: 'Primary Squat Pattern', minReps: 6, maxReps: 10, rest: '180s',
+            note: 'Brace core, 3-sec controlled descent',
+            options: [
+              { id: 'wed_ex1', name: 'Barbell Back Squat (Per Side)', defaultWt: 20 },
+              { id: 'wed_ex1_alt1', name: 'Smith Machine Squat (Per Side)', defaultWt: 25 },
+              { id: 'wed_ex1_alt2', name: 'Heel-Elevated DB Goblet Squat', defaultWt: 25 }
+            ]
+          },
+          {
+            slotId: 'wed_ex2', pattern: 'Quad Compound Press', minReps: 10, maxReps: 15, rest: '150s',
+            note: 'Full knee flexion without pelvic tuck',
+            options: [
+              { id: 'wed_ex2', name: '45° Leg Press (Total Plates)', defaultWt: 60 },
+              { id: 'wed_ex2_alt1', name: 'Hack Squat Machine', defaultWt: 40 },
+              { id: 'wed_ex2_alt2', name: 'DB Bulgarian Split Squat (Per Hand)', defaultWt: 12.5 }
+            ]
+          },
+          {
+            slotId: 'wed_ex3', pattern: 'Hip Hinge / Hamstring Stretch', minReps: 8, maxReps: 12, rest: '150s',
+            note: 'Push hips back until deep hamstring stretch',
+            options: [
+              { id: 'wed_ex3', name: 'Romanian Deadlift DB/BB (Per Side)', defaultWt: 22.5 },
+              { id: 'wed_ex3_alt1', name: '45° Hyperextension (Weighted)', defaultWt: 10 },
+              { id: 'wed_ex3_alt2', name: 'Cable Pull-Throughs', defaultWt: 30 }
+            ]
+          },
+          {
+            slotId: 'wed_ex4', pattern: 'Knee Flexion Hamstring', minReps: 10, maxReps: 15, rest: '90s',
+            note: 'Control the eccentric return',
+            options: [
+              { id: 'wed_ex4', name: 'Seated / Lying Leg Curl Machine', defaultWt: 50 },
+              { id: 'wed_ex4_alt1', name: 'Swiss Ball / Slider Hamstring Curls', defaultWt: 0 }
+            ]
+          },
+          {
+            slotId: 'wed_ex5', pattern: 'Calf Raise (Standing / Seated)', minReps: 12, maxReps: 22, rest: '90s',
+            note: '2-sec pause at bottom stretch',
+            options: [
+              { id: 'wed_ex5', name: 'Standing Calf Raises', defaultWt: 35 },
+              { id: 'wed_custom_1795579816694', name: 'Seated Calf Raises (Custom)', defaultWt: 35, isCustom: true },
+              { id: 'wed_ex5_alt1', name: 'Leg Press Calf Press', defaultWt: 90 }
+            ]
+          }
+        ]
+      },
+      thu: {
+        title: 'Thursday — Upper (Strength & Pull-Up Volume)',
+        focus: 'Rate feel + write quick exercise feedback • Tap "✅ Finish & Save to Diary" after your session',
+        warmups: [
+          { id: 'thu_w1', text: 'Cable External Rotations (2×15)' },
+          { id: 'thu_w2', text: 'Scapular Pull-Ups (2×8)' }
+        ],
+        cooldowns: [
+          { id: 'thu_c1', text: 'Pec & Front Delt Stretch (2×30s)' },
+          { id: 'thu_c2', text: 'Neck Isometrics (3×10s)' }
+        ],
+        slots: [
+          {
+            slotId: 'thu_ex1', pattern: 'Upper Chest Press', minReps: 8, maxReps: 12, rest: '150s',
+            note: 'Controlled 2-sec negative',
+            options: [
+              { id: 'thu_ex1', name: 'Incline DB Bench Press (Per Hand)', defaultWt: 20 },
+              { id: 'thu_ex1_alt1', name: 'Incline Machine Chest Press', defaultWt: 40 },
+              { id: 'thu_ex1_alt2', name: 'Weighted / Feet-Elevated Push-Ups', defaultWt: 0 }
+            ]
+          },
+          {
+            slotId: 'thu_ex2', pattern: 'Second Weekly Pull-Up Slot', minReps: 8, maxReps: 10, rest: '150s',
+            note: 'Strict chin over bar, 1s pause',
+            options: [
+              { id: 'thu_ex2', name: 'Counterweight Assisted Pull-Ups', defaultWt: 45 },
+              { id: 'thu_ex2_alt1', name: 'Underhand Assisted Chin-Ups', defaultWt: 27.5 },
+              { id: 'thu_ex2_alt2', name: 'Heavy Lat Pulldown (Overhand)', defaultWt: 45 }
+            ]
+          },
+          {
+            slotId: 'thu_ex3', pattern: 'Upper Back Horizontal Row', minReps: 8, maxReps: 12, rest: '120s',
+            note: 'Flat back, pull to lower ribs',
+            options: [
+              { id: 'thu_ex3', name: 'Bent-Over Barbell / DB Row', defaultWt: 15 },
+              { id: 'thu_ex3_alt1', name: 'Seated Machine Row (Wide Grip)', defaultWt: 40 },
+              { id: 'thu_ex3_alt2', name: 'Chest-Supported Incline DB Row', defaultWt: 17.5 }
+            ]
+          },
+          {
+            slotId: 'thu_ex4', pattern: 'Second Weekly Shoulder Press', minReps: 8, maxReps: 12, rest: '120s',
+            note: 'Strict vertical press without arching lower back',
+            options: [
+              { id: 'thu_ex4', name: 'Seated DB Shoulder Press (Per Hand)', defaultWt: 15 },
+              { id: 'thu_ex4_alt1', name: 'Arnold DB Press (Per Hand)', defaultWt: 12.5 },
+              { id: 'thu_ex4_alt2', name: 'Smith Machine Seated Overhead Press', defaultWt: 12.5 }
+            ]
+          },
+          {
+            slotId: 'thu_ex5', pattern: 'Rotator Cuff & Arms Finisher', minReps: 12, maxReps: 15, rest: '90s',
+            note: 'Swap to Bicep+Tricep Superset if prioritizing arms',
+            options: [
+              { id: 'thu_ex5', name: 'Cable Face Pulls + Rope Pushdown', defaultWt: 25 },
+              { id: 'thu_ex5_alt1', name: 'Cable Curl + Rope Pushdown Superset (Arms)', defaultWt: 15 },
+              { id: 'thu_ex5_alt2', name: 'DB Hammer Curl + Overhead Ext. Superset', defaultWt: 10 }
+            ]
+          }
+        ]
+      },
+      fri: {
+        title: 'Friday — Lower (Posterior Chain, Unilateral & Core)',
+        focus: 'Rate feel + write quick exercise feedback • Tap "✅ Finish & Save to Diary" after your session',
+        warmups: [
+          { id: 'fri_w1', text: 'Pelvic Tilts & Hip Circles (2 mins)' },
+          { id: 'fri_w2', text: 'Bodyweight Walking Lunges (2×10/leg)' }
+        ],
+        cooldowns: [
+          { id: 'fri_c1', text: 'Pigeon Glute Stretch (2×30s)' },
+          { id: 'fri_c2', text: 'Calf & Ankle Dorsiflexion Stretch (2×30s)' }
+        ],
+        slots: [
+          {
+            slotId: 'fri_ex1', pattern: 'Primary Posterior Hinge', minReps: 8, maxReps: 10, rest: '150s',
+            note: 'Keep bar/DBs close to shins',
+            options: [
+              { id: 'fri_ex1', name: 'Barbell RDL / Trap Bar (Per Side)', defaultWt: 30 },
+              { id: 'fri_ex1_alt1', name: 'Dumbbell RDL (Per Hand)', defaultWt: 22.5 },
+              { id: 'fri_ex1_alt2', name: 'Barbell Hip Thrust (Per Side)', defaultWt: 30 }
+            ]
+          },
+          {
+            slotId: 'fri_ex2', pattern: 'Secondary Squat / Quad', minReps: 8, maxReps: 12, rest: '150s',
+            note: 'Upright torso quad focus',
+            options: [
+              { id: 'fri_ex2', name: 'Hack Squat / Front Squat (Per Side)', defaultWt: 25 },
+              { id: 'fri_ex2_alt1', name: 'Leg Extension Machine', defaultWt: 45 },
+              { id: 'fri_ex2_alt2', name: 'Close-Stance Leg Press', defaultWt: 110 }
+            ]
+          },
+          {
+            slotId: 'fri_ex3', pattern: 'Unilateral Single-Leg', minReps: 10, maxReps: 12, rest: '120s',
+            note: 'Reps per leg',
+            options: [
+              { id: 'fri_ex3', name: 'Bulgarian Split Squat / Walking Lunge', defaultWt: 36 },
+              { id: 'fri_ex3_alt1', name: 'Reverse DB Lunges (Per Hand)', defaultWt: 12.5 },
+              { id: 'fri_ex3_alt2', name: 'Step-Ups (Controlled Negative)', defaultWt: 10 }
+            ]
+          },
+          {
+            slotId: 'fri_ex4', pattern: 'Lower Ab / Pelvic Control', minReps: 10, maxReps: 15, rest: '90s',
+            note: 'Curl pelvis up, no swinging',
+            options: [
+              { id: 'fri_ex4', name: 'Hanging Knee / Leg Raises', defaultWt: 5 },
+              { id: 'fri_ex4_alt1', name: 'Captain’s Chair Leg Raises', defaultWt: 0 },
+              { id: 'fri_ex4_alt2', name: 'Cable Rope Crunches', defaultWt: 35 }
+            ]
+          },
+          {
+            slotId: 'fri_ex5', pattern: 'Soleus / Seated Calf', minReps: 12, maxReps: 15, rest: '90s',
+            note: 'Full range of motion',
+            options: [
+              { id: 'fri_ex5', name: 'Seated Calf Raises', defaultWt: 60 },
+              { id: 'fri_ex5_alt1', name: 'Single-Leg Standing DB Calf Raise', defaultWt: 12.5 }
+            ]
+          }
+        ]
+      }
+    };
+
+    const PULLUP_STAGES = [
+      { id: 1, title: 'Stage 1: Assisted Base', desc: '30–35 kg Counterweight • Build to 3×10 strict reps' },
+      { id: 2, title: 'Stage 2: Bridge Strength', desc: '15–20 kg Counterweight • Build to 3×8–10 with 1s top pause' },
+      { id: 3, title: 'Stage 3: 5s Negatives', desc: 'Jump to top + 5-sec slow eccentric drops (3×4–5)' },
+      { id: 4, title: 'Stage 4: Strict Unassisted', desc: '1–3 → 8 → 15 → 30 strict pull-ups (Feb 28, 2028 target)' }
+    ];
+
+    const SEED_STATE = {
+      updatedAt: 1795680000000,
+      apiKey: '',
+      model: 'gemini-3.5-flash-lite',
+      targets: { kcal: 2300, protein: 185, goalWeight: 82.5 },
+      mainTab: 'workout',
+      activeDay: 'thu',
+      pullupStage: 4,
+      fatBonus: 0,
+      selectedBlueprintId: 'bp_chicken_home',
+      weightsLog: [
+        { date: '2026-11-14', label: 'Nov 14', kg: 88.7 },
+        { date: '2026-11-26', label: 'Nov 26', kg: 87.2 }
+      ],
+      stepsByDate: {
+        '2026-11-25': 13215
+      },
+      mealsByDate: {
+        '2026-11-24': [
+          { id: 1795492889678, name: '1 Scoop Whey + Water', kcal: 120, protein: 24, carbs: 3, fat: 1.5 },
+          { id: 1795492891617, name: '4 Whole Boiled Eggs', kcal: 310, protein: 25, carbs: 2, fat: 21 },
+          { id: 1795520017697, name: 'Indian Tea, Roti, Chettinad Chicken, and Biscuits', kcal: 885, protein: 28, carbs: 112, fat: 37 },
+          { id: 1795527462012, name: 'Bhelpuri and Chai', kcal: 410, protein: 8, carbs: 65, fat: 13 },
+          { id: 1795531626954, name: 'Veg pulao with dal and chana masala', kcal: 580, protein: 16, carbs: 85, fat: 20 },
+          { id: 1795536808263, name: 'Perk 3 Indian Meal', kcal: 650, protein: 18, carbs: 75, fat: 30 }
+        ],
+        '2026-11-25': [
+          { id: 1795575285066, name: 'Black Coffee and Banana', kcal: 110, protein: 1, carbs: 27, fat: 0 },
+          { id: 1795575290503, name: '1 Scoop Whey + Water', kcal: 120, protein: 24, carbs: 3, fat: 1.5 },
+          { id: 1795575293463, name: '4 Whole Boiled Eggs', kcal: 310, protein: 25, carbs: 2, fat: 21 },
+          { id: 1795591496223, name: 'Milk and Hide & Seek Biscuits', kcal: 210, protein: 8, carbs: 30, fat: 7 },
+          { id: 1795613632586, name: 'Paneer Biryani Meal with Manchurian and Tea', kcal: 1280, protein: 36, carbs: 155, fat: 58 },
+          { id: 1795619210790, name: 'Khichdi with Dal, Aloo Fry, and Papad', kcal: 620, protein: 18, carbs: 85, fat: 23 }
+        ],
+        '2026-11-26': [
+          { id: 1795668491027, name: '1 Scoop Whey + Water', kcal: 120, protein: 24, carbs: 3, fat: 1.5 },
+          { id: 1795668495871, name: '4 Whole Boiled Eggs', kcal: 310, protein: 25, carbs: 2, fat: 21 },
+          { id: 1795678030798, name: 'Rice, roti, aloo gobi sabzi, dal/kadhi, cucumber, and onion', kcal: 590, protein: 14, carbs: 95, fat: 17 }
+        ]
+      },
+      diaryLog: [
+        {
+          id: 1794600000001,
+          date: '2026-11-14',
+          label: 'Nov 14',
+          mood: '🔥 Smooth & Locked In',
+          note: 'Day 1 baseline logged at 88.7 kg. Starting Phase 1 recomp toward 82.5 kg and 30 strict pull-ups.',
+          videoUrl: ''
+        },
+        {
+          id: 1795679000002,
+          date: '2026-11-26',
+          label: 'Nov 26',
+          mood: '🔥 Smooth & Locked In',
+          note: 'Down to 87.2 kg (-1.5 kg from start)! Completed Mon–Thu sessions cleanly and hit 13,215 steps yesterday.',
+          videoUrl: ''
+        }
+      ],
+      workoutArchiveLog: [],
+      selectedOptionBySlot: {
+        wed_ex5: 'wed_custom_1795579816694'
+      },
+      customOptionsBySlot: {},
+      checks: {
+        mon_w1: true, mon_w2: true, mon_w3: true, mon_w4: true,
+        mon_c1: true, mon_c2: true, mon_c3: true, mon_c4: true,
+        tue_w1: true, tue_w2: true, tue_w3: true, tue_c1: true, tue_c2: true,
+        wed_w1: true, wed_w2: true, wed_w3: true, wed_c1: true, wed_c2: true,
+        thu_w1: true, thu_w2: true, thu_c1: true, thu_c2: true
+      },
+      lifts: {
+        mon_ex1: { weight: 20, reps: ['12', '10', '8'], feel: 'smooth', note: '', history: [] },
+        mon_ex2: { weight: 15, reps: ['12', '11', '8'], feel: 'smooth', note: '', history: [] },
+        mon_ex3: { weight: 20, reps: ['20', '15', '15'], feel: 'smooth', note: '', history: [] },
+        mon_ex4: { weight: 7.5, reps: ['15', '12', '10'], feel: 'smooth', note: '', history: [] },
+        mon_ex5: { weight: 30, reps: ['20', '15', '12'], feel: 'smooth', note: '', history: [] },
+        mon_ex6: { weight: 37.5, reps: ['15', '15', '15'], feel: 'smooth', note: '', history: [] },
+        tue_ex1: { weight: 45, reps: ['5', '10', '8'], feel: 'smooth', note: '', history: [] },
+        tue_ex2: { weight: 15, reps: ['15', '15', '15'], feel: 'smooth', note: '', history: [] },
+        tue_ex3: { weight: 35, reps: ['12', '10', '12'], feel: 'smooth', note: '', history: [] },
+        tue_ex4: { weight: 35, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
+        tue_ex5: { weight: 20, reps: ['20', '20', '15'], feel: 'smooth', note: '', history: [] },
+        tue_ex6: { weight: 7.5, reps: ['15', '15', '15'], feel: 'smooth', note: '', history: [] },
+        wed_ex1: { weight: 20, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
+        wed_ex2: { weight: 60, reps: ['20', '12', '12'], feel: 'smooth', note: '', history: [] },
+        wed_ex3: { weight: 22.5, reps: ['15', '15', '15'], feel: 'smooth', note: '', history: [] },
+        wed_ex4: { weight: 50, reps: ['15', '15', '15'], feel: 'smooth', note: '', history: [] },
+        wed_ex5: { weight: 35, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
+        wed_custom_1795579816694: { weight: 35, reps: ['30', '20', '20'], feel: 'smooth', note: '', history: [] },
+        thu_ex1: { weight: 20, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
+        thu_ex2: { weight: 45, reps: ['12', '10', '8'], feel: 'smooth', note: '', history: [] },
+        thu_ex3: { weight: 15, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
+        thu_ex4: { weight: 15, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
+        thu_ex5: { weight: 25, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
+        fri_ex1: { weight: 30, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
+        fri_ex2: { weight: 25, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
+        fri_ex3: { weight: 36, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
+        fri_ex4: { weight: 5, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
+        fri_ex5: { weight: 60, reps: ['', '', ''], feel: 'smooth', note: '', history: [] }
+      }
+    };
+
+    function dateOffsetKey(offsetDays = 0) {
+      const d = new Date();
+      d.setDate(d.getDate() + offsetDays);
+      return d.toISOString().slice(0, 10);
+    }
+
+    function todayKey() {
+      return dateOffsetKey(0);
+    }
+
+    function shortDateLabel(iso) {
+      const parts = iso.split('-');
+      if (parts.length !== 3) return iso;
+      const d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function getCloudCfg() {
+      try {
+        return JSON.parse(localStorage.getItem(CLOUD_CFG_KEY) || '{}');
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveCloudCfg(cfg) {
+      localStorage.setItem(CLOUD_CFG_KEY, JSON.stringify(cfg));
+    }
+
+    function deepMergeBackup(base, incoming) {
+      const mergedWeightsMap = {};
+      [...(base.weightsLog || []), ...(incoming.weightsLog || [])].forEach(w => {
+        if (w && w.date) mergedWeightsMap[w.date] = w;
+      });
+      const mergedWeights = Object.values(mergedWeightsMap).sort((a, b) => a.date.localeCompare(b.date));
+
+      const mergedMeals = { ...(base.mealsByDate || {}) };
+      Object.entries(incoming.mealsByDate || {}).forEach(([date, list]) => {
+        const existingIds = new Set((mergedMeals[date] || []).map(m => m.id));
+        const combined = [...(mergedMeals[date] || [])];
+        (list || []).forEach(m => {
+          if (!existingIds.has(m.id)) combined.push(m);
+        });
+        mergedMeals[date] = combined;
+      });
+
+      const mergedDiaryMap = {};
+      [...(base.diaryLog || []), ...(incoming.diaryLog || [])].forEach(d => {
+        if (d && d.id) mergedDiaryMap[d.id] = d;
+      });
+      const mergedDiary = Object.values(mergedDiaryMap).sort((a, b) => b.id - a.id);
+
+      const mergedArchiveMap = {};
+      [...(base.workoutArchiveLog || []), ...(incoming.workoutArchiveLog || [])].forEach(a => {
+        if (a && a.id) mergedArchiveMap[a.id] = a;
+      });
+      const mergedArchive = Object.values(mergedArchiveMap).sort((a, b) => b.id - a.id);
+
+      return {
+        ...base,
+        ...incoming,
+        apiKey: incoming.apiKey || base.apiKey || '',
+        targets: { ...base.targets, ...(incoming.targets || {}) },
+        weightsLog: mergedWeights,
+        stepsByDate: { ...(base.stepsByDate || {}), ...(incoming.stepsByDate || {}) },
+        mealsByDate: mergedMeals,
+        diaryLog: mergedDiary,
+        workoutArchiveLog: mergedArchive,
+        selectedOptionBySlot: { ...(base.selectedOptionBySlot || {}), ...(incoming.selectedOptionBySlot || {}) },
+        customOptionsBySlot: { ...(base.customOptionsBySlot || {}), ...(incoming.customOptionsBySlot || {}) },
+        checks: { ...(base.checks || {}), ...(incoming.checks || {}) },
+        lifts: { ...(base.lifts || {}), ...(incoming.lifts || {}) }
+      };
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY)
+          || localStorage.getItem('progressive_lift_os_v8')
+          || localStorage.getItem('progressive_lift_os_v7')
+          || localStorage.getItem('progressive_lift_os_v6')
+          || localStorage.getItem('progressive_lift_os_v5')
+          || localStorage.getItem('progressive_lift_os_v4')
+          || localStorage.getItem('progressive_lift_os_v3')
+          || localStorage.getItem('progressive_lift_os_v2')
+          || localStorage.getItem('progressive_lift_os_v1');
+        const seedCopy = JSON.parse(JSON.stringify(SEED_STATE));
+        if (!raw) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(seedCopy));
+          return seedCopy;
+        }
+        const parsed = JSON.parse(raw);
+        const merged = deepMergeBackup(seedCopy, parsed);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+        return merged;
+      } catch (e) {
+        return JSON.parse(JSON.stringify(SEED_STATE));
+      }
+    }
+
+    let state = loadState();
+    let openDrawerSlotId = null;
+    let syncTimer = null;
+
+    function saveState(skipCloud = false) {
+      state.updatedAt = Date.now();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateSummaryBar();
+      if (!skipCloud) scheduleCloudPush();
+    }
+
+    /* 2-WAY PRIVATE GITHUB GIST CLOUD SYNC */
+    function scheduleCloudPush() {
+      const cfg = getCloudCfg();
+      if (!cfg.gistId || !cfg.gistToken) return;
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(() => pushToGist(), 1500);
+    }
+
+    function setCloudPill(text, isReady = false) {
+      const el = document.getElementById('cloudStatusPill');
+      if (!el) return;
+      el.textContent = text;
+      el.classList.toggle('ready', isReady);
+    }
+
+    async function pushToGist() {
+      const cfg = getCloudCfg();
+      if (!cfg.gistId || !cfg.gistToken) return;
+      try {
+        setCloudPill('☁️ SYNCING...', true);
+        const res = await fetch(`https://api.github.com/gists/${encodeURIComponent(cfg.gistId.trim())}`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${cfg.gistToken.trim()}`,
+            'Accept': 'application/vnd.github+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            files: {
+              'progressive_lift_sync.json': {
+                content: JSON.stringify(state, null, 2)
+              }
+            }
+          })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        setCloudPill('☁️ SYNCED', true);
+      } catch (e) {
+        setCloudPill('☁️ SYNC ERR', false);
+      }
+    }
+
+    async function syncWithGist(manual = false) {
+      const cfg = getCloudCfg();
+      const diag = document.getElementById('syncDiag');
+      if (!cfg.gistId || !cfg.gistToken) {
+        setCloudPill('☁️ LOCAL ONLY', false);
+        if (manual && diag) diag.textContent = 'Enter both Gist ID and Token above to enable cross-device sync.';
+        return;
+      }
+      try {
+        setCloudPill('☁️ PULLING...', true);
+        if (diag) diag.textContent = 'Checking cloud Gist for updates...';
+        const res = await fetch(`https://api.github.com/gists/${encodeURIComponent(cfg.gistId.trim())}`, {
+          headers: {
+            'Authorization': `Bearer ${cfg.gistToken.trim()}`,
+            'Accept': 'application/vnd.github+json'
+          }
+        });
+        if (!res.ok) throw new Error(`GitHub Gist HTTP ${res.status}`);
+        const gist = await res.json();
+        const fileObj = gist.files?.['progressive_lift_sync.json'] || Object.values(gist.files || {})[0];
+        if (fileObj && fileObj.content) {
+          const remote = JSON.parse(fileObj.content);
+          if (remote && typeof remote === 'object' && Object.keys(remote).length > 0) {
+            if ((remote.updatedAt || 0) >= (state.updatedAt || 0)) {
+              state = deepMergeBackup(state, remote);
+            } else {
+              state = deepMergeBackup(remote, state);
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            updateSummaryBar();
+            renderWorkoutDay();
+            renderIdealBlueprint();
+            renderMeals();
+            renderRecomp();
+            renderJourneyTimeline();
+          }
+        }
+        await pushToGist();
+        if (diag) diag.textContent = `Synced cleanly at ${new Date().toLocaleTimeString()}!`;
+      } catch (e) {
+        setCloudPill('☁️ SYNC ERR', false);
+        if (diag) diag.textContent = `Sync error: ${e.message}`;
+      }
+    }
+
+    /* 7-DAY CALENDAR ROLLING AVERAGE */
+    function computeRolling7DayWeight() {
+      const sorted = [...state.weightsLog].sort((a, b) => a.date.localeCompare(b.date));
+      if (!sorted.length) return { avg: 87.2, latest: 87.2, start: 88.7 };
+      const latestEntry = sorted[sorted.length - 1];
+      const startEntry = sorted[0];
+
+      const latestMs = new Date(latestEntry.date + 'T00:00:00').getTime();
+      const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+      const last7Calendar = sorted.filter(w => {
+        const ms = new Date(w.date + 'T00:00:00').getTime();
+        return (latestMs - ms) >= 0 && (latestMs - ms) < sevenDaysMs;
+      });
+      const pool = last7Calendar.length ? last7Calendar : [latestEntry];
+      const avg = (pool.reduce((s, w) => s + Number(w.kg), 0) / pool.length).toFixed(1);
+      return { avg: Number(avg), latest: Number(latestEntry.kg), start: Number(startEntry.kg) };
+    }
+
+    function updateSummaryBar() {
+      const pill = document.getElementById('apiStatusPill');
+      if (state.apiKey && state.apiKey.trim().length > 10) {
+        pill.textContent = 'AI READY';
+        pill.classList.add('ready');
+      } else {
+        pill.textContent = 'AI KEY NEEDED';
+        pill.classList.remove('ready');
+      }
+
+      const wStats = computeRolling7DayWeight();
+      const lostSoFar = Math.round((wStats.start - wStats.latest) * 10) / 10;
+      document.getElementById('statWeight').textContent = `${wStats.avg.toFixed(1)} kg`;
+      document.getElementById('statWeightSub').textContent = `Start: ${wStats.start} kg (${lostSoFar >= 0 ? '-' + lostSoFar : '+' + Math.abs(lostSoFar)}) • Goal: ${state.targets.goalWeight}`;
+
+      const meals = state.mealsByDate[todayKey()] || [];
+      const totKcal = Math.round(meals.reduce((s, m) => s + Number(m.kcal || 0), 0));
+      const totProt = Math.round(meals.reduce((s, m) => s + Number(m.protein || 0), 0));
+      document.getElementById('statKcal').textContent = `${totKcal} / ${state.targets.kcal}`;
+      document.getElementById('statKcalSub').textContent = `${Math.max(0, state.targets.kcal - totKcal)} kcal left`;
+      document.getElementById('statProt').textContent = `${totProt} / ${state.targets.protein}g`;
+      document.getElementById('statProtSub').textContent = `${Math.max(0, state.targets.protein - totProt)}g needed`;
+
+      document.getElementById('statStage').textContent = `Stage ${state.pullupStage}`;
+      const steps = state.stepsByDate[todayKey()] || 0;
+      document.getElementById('statSteps').textContent = `Steps: ${steps.toLocaleString()} / 10k`;
+    }
+
+    function switchMainTab(tab) {
+      state.mainTab = tab;
+      document.querySelectorAll('.main-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tab);
+      });
+      document.getElementById('tab-workout').classList.toggle('hidden', tab !== 'workout');
+      document.getElementById('tab-nutrition').classList.toggle('hidden', tab !== 'nutrition');
+      document.getElementById('tab-recomp').classList.toggle('hidden', tab !== 'recomp');
+      document.getElementById('tab-diary').classList.toggle('hidden', tab !== 'diary');
+      if (tab === 'nutrition') {
+        renderIdealBlueprint();
+        renderMeals();
+      }
+      if (tab === 'recomp') renderRecomp();
+      if (tab === 'diary') {
+        const dInp = document.getElementById('diaryDateInput');
+        if (dInp && !dInp.value) dInp.value = todayKey();
+        renderJourneyTimeline();
+      }
+      saveState();
+    }
+
+    function switchDay(day) {
+      state.activeDay = day;
+      openDrawerSlotId = null;
+      document.querySelectorAll('.day-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.day === day);
+      });
+      renderWorkoutDay();
+      saveState();
+    }
+
+    function getSlotOptions(slot) {
+      const custom = state.customOptionsBySlot[slot.slotId] || [];
+      return [...slot.options, ...custom];
+    }
+
+    function getActiveOption(slot) {
+      const opts = getSlotOptions(slot);
+      const selectedId = state.selectedOptionBySlot[slot.slotId] || slot.slotId;
+      return opts.find(o => o.id === selectedId) || opts[0];
+    }
+
+    function getProgressionStatus(slot, lift) {
+      if (!lift || !lift.reps || lift.reps.length === 0) return 'build';
+      const hitTopReps = lift.reps.every(r => r !== '' && Number(r) >= slot.maxReps);
+      const feel = lift.feel || 'smooth';
+      if (hitTopReps && feel === 'smooth') return 'ready';
+      if (hitTopReps && feel !== 'smooth') return 'hold';
+      return 'build';
+    }
+
+    function renderWorkoutDay() {
+      const day = state.activeDay;
+      const info = PROGRAM[day];
+      document.getElementById('dayTitle').textContent = info.title;
+      document.getElementById('dayFocus').textContent = info.focus;
+
+      document.getElementById('warmupList').innerHTML = info.warmups.map(w => `
+        <label class="check-item">
+          <input type="checkbox" ${state.checks[w.id] ? 'checked' : ''} onchange="toggleCheck('${w.id}', this.checked)" />
+          <span>${w.text}</span>
+        </label>
+      `).join('');
+
+      document.getElementById('cooldownList').innerHTML = info.cooldowns.map(c => `
+        <label class="check-item">
+          <input type="checkbox" ${state.checks[c.id] ? 'checked' : ''} onchange="toggleCheck('${c.id}', this.checked)" />
+          <span>${c.text}</span>
+        </label>
+      `).join('');
+
+      const container = document.getElementById('exercisesContainer');
+      container.innerHTML = info.slots.map((slot, sIdx) => {
+        const opts = getSlotOptions(slot);
+        const activeOpt = getActiveOption(slot);
+        const isSwapped = activeOpt.id !== slot.slotId;
+
+        if (!state.lifts[activeOpt.id]) {
+          state.lifts[activeOpt.id] = { weight: activeOpt.defaultWt ?? 10, reps: ['', '', ''], feel: 'smooth', note: '', history: [] };
+        }
+        const lift = state.lifts[activeOpt.id];
+        if (!lift.feel) lift.feel = 'smooth';
+        const status = getProgressionStatus(slot, lift);
+
+        const badgeClass = status === 'ready' ? 'up' : (status === 'hold' ? 'hold' : '');
+        const badgeText = status === 'ready'
+          ? '▲ ADD +2.5 KG'
+          : (status === 'hold' ? '⏸ HOLD WEIGHT (NOT SMOOTH)' : `Build to ${slot.maxReps} reps`);
+
+        const selectOptionsHtml = opts.map((o, idx) => {
+          const tag = idx === 0 ? '★ Primary: ' : (o.isCustom ? '✎ Custom: ' : '⇄ Alt: ');
+          return `<option value="${o.id}" ${o.id === activeOpt.id ? 'selected' : ''}>${tag}${o.name}</option>`;
+        }).join('') + `<option value="__ADD_CUSTOM__">➕ Add Custom Alternative to This Slot...</option>`;
+
+        const drawerHtml = openDrawerSlotId === slot.slotId ? `
+          <div class="custom-alt-drawer">
+            <input id="newAltName_${slot.slotId}" class="text-input" style="flex:2 1 180px;" placeholder="Custom variation name (e.g. Pec Deck Fly)" />
+            <input id="newAltWt_${slot.slotId}" class="text-input" style="flex:1 1 80px;" type="number" step="0.5" placeholder="Start kg" />
+            <button type="button" class="btn btn-primary" onclick="saveCustomSlotAlt('${slot.slotId}')">Save & Select</button>
+            <button type="button" class="btn" onclick="closeCustomDrawer()">Cancel</button>
+          </div>
+        ` : '';
+
+        const setsHtml = lift.reps.map((rep, idx) => `
+          <div class="set-box">
+            <span class="set-label">Set ${idx + 1}</span>
+            <div class="stepper-group">
+              <button type="button" class="step-btn" onclick="stepRep('${slot.slotId}', '${activeOpt.id}', ${idx}, -1)">−</button>
+              <input
+                id="rep_${activeOpt.id}_${idx}"
+                class="rep-input"
+                type="text"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                value="${rep}"
+                placeholder="${slot.minReps}-${slot.maxReps}"
+                oninput="updateRepDirect('${slot.slotId}', '${activeOpt.id}', ${idx}, this.value)"
+              />
+              <button type="button" class="step-btn" onclick="stepRep('${slot.slotId}', '${activeOpt.id}', ${idx}, 1)">+</button>
+            </div>
+          </div>
+        `).join('');
+
+        return `
+          <div class="ex-card ${status === 'ready' ? 'ready-up' : ''}" id="card_${slot.slotId}">
+            <div class="ex-top">
+              <div style="min-width:0; flex:1 1 auto;">
+                <div class="ex-slot-tag">Slot ${sIdx + 1} • ${slot.pattern}</div>
+                <div class="ex-name">${activeOpt.name}</div>
+                <div class="ex-meta">Target: ${lift.reps.length}×${slot.minReps}–${slot.maxReps} reps • Rest ${slot.rest} • ${slot.note}</div>
+              </div>
+              <span class="badge ${badgeClass}" id="badge_${slot.slotId}">${badgeText}</span>
+            </div>
+
+            <div class="alt-bar">
+              <select
+                class="alt-select ${isSwapped ? 'swapped' : ''}"
+                aria-label="Select exercise or alternative"
+                onchange="handleSlotSelect('${slot.slotId}', this.value)"
+              >
+                ${selectOptionsHtml}
+              </select>
+              ${activeOpt.isCustom ? `<button type="button" class="btn btn-danger" style="padding:6px 9px;" onclick="deleteCustomSlotAlt('${slot.slotId}', '${activeOpt.id}')">Delete Custom</button>` : ''}
+            </div>
+
+            ${drawerHtml}
+
+            <div class="weight-bar">
+              <div class="stepper-group">
+                <span class="set-label">Load (kg):</span>
+                <button type="button" class="step-btn" onclick="stepWeight('${activeOpt.id}', -2.5)">−</button>
+                <input
+                  id="wt_${activeOpt.id}"
+                  class="num-input"
+                  type="text"
+                  inputmode="decimal"
+                  value="${lift.weight}"
+                  onchange="updateWeightDirect('${activeOpt.id}', this.value)"
+                />
+                <button type="button" class="step-btn" onclick="stepWeight('${activeOpt.id}', 2.5)">+</button>
+              </div>
+              <div class="btn-row">
+                <button type="button" class="btn" style="padding:5px 9px;" onclick="changeSetCount('${activeOpt.id}', -1)">− Set</button>
+                <button type="button" class="btn" style="padding:5px 9px;" onclick="changeSetCount('${activeOpt.id}', 1)">+ Set</button>
+              </div>
+            </div>
+
+            <div class="sets-grid">${setsHtml}</div>
+
+            <div class="feedback-bar" id="fb_${activeOpt.id}">
+              <button type="button" class="fb-btn ${lift.feel === 'smooth' ? 'active-smooth' : ''}" onclick="setLiftFeel('${slot.slotId}', '${activeOpt.id}', 'smooth')">✅ Smooth (2+ RIR)</button>
+              <button type="button" class="fb-btn ${lift.feel === 'hard' ? 'active-hard' : ''}" onclick="setLiftFeel('${slot.slotId}', '${activeOpt.id}', 'hard')">⚡ Hard (0–1 RIR)</button>
+              <button type="button" class="fb-btn ${lift.feel === 'grind' ? 'active-grind' : ''}" onclick="setLiftFeel('${slot.slotId}', '${activeOpt.id}', 'grind')">⚠️ Grind / Tight</button>
+            </div>
+
+            <input
+              class="fb-note-input"
+              type="text"
+              value="${(lift.note || '').replace(/"/g, '&quot;')}"
+              placeholder="Write exercise feedback (e.g. 'Very smooth, ready for +2.5kg next week' or 'Left shoulder tight')..."
+              oninput="updateLiftNote('${activeOpt.id}', this.value)"
+            />
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateLiftNote(exId, val) {
+      state.lifts[exId].note = val;
+      saveState();
+    }
+
+    function setLiftFeel(slotId, exId, feel) {
+      state.lifts[exId].feel = feel;
+      const bar = document.getElementById(`fb_${exId}`);
+      if (bar) {
+        const btns = bar.querySelectorAll('.fb-btn');
+        btns[0].className = `fb-btn ${feel === 'smooth' ? 'active-smooth' : ''}`;
+        btns[1].className = `fb-btn ${feel === 'hard' ? 'active-hard' : ''}`;
+        btns[2].className = `fb-btn ${feel === 'grind' ? 'active-grind' : ''}`;
+      }
+      refreshExerciseCardStatus(slotId, exId);
+      saveState();
+    }
+
+    function handleSlotSelect(slotId, value) {
+      const y = window.scrollY;
+      if (value === '__ADD_CUSTOM__') {
+        openDrawerSlotId = slotId;
+        renderWorkoutDay();
+        window.scrollTo(0, y);
+        return;
+      }
+      openDrawerSlotId = null;
+      state.selectedOptionBySlot[slotId] = value;
+      saveState();
+      renderWorkoutDay();
+      window.scrollTo(0, y);
+    }
+
+    function closeCustomDrawer() {
+      const y = window.scrollY;
+      openDrawerSlotId = null;
+      renderWorkoutDay();
+      window.scrollTo(0, y);
+    }
+
+    function saveCustomSlotAlt(slotId) {
+      const y = window.scrollY;
+      const name = document.getElementById(`newAltName_${slotId}`).value.trim();
+      const wt = parseFloat(document.getElementById(`newAltWt_${slotId}`).value);
+      if (!name) return;
+
+      const customId = `${slotId}_cust_${Date.now()}`;
+      if (!state.customOptionsBySlot[slotId]) state.customOptionsBySlot[slotId] = [];
+      state.customOptionsBySlot[slotId].push({
+        id: customId,
+        name,
+        defaultWt: isNaN(wt) ? 10 : wt,
+        isCustom: true
+      });
+      state.selectedOptionBySlot[slotId] = customId;
+      state.lifts[customId] = { weight: isNaN(wt) ? 10 : wt, reps: ['', '', ''], feel: 'smooth', note: '', history: [] };
+      openDrawerSlotId = null;
+      saveState();
+      renderWorkoutDay();
+      window.scrollTo(0, y);
+    }
+
+    function deleteCustomSlotAlt(slotId, optionId) {
+      const y = window.scrollY;
+      state.customOptionsBySlot[slotId] = (state.customOptionsBySlot[slotId] || []).filter(o => o.id !== optionId);
+      state.selectedOptionBySlot[slotId] = slotId;
+      delete state.lifts[optionId];
+      saveState();
+      renderWorkoutDay();
+      window.scrollTo(0, y);
+    }
+
+    function refreshExerciseCardStatus(slotId, exId) {
+      const slot = PROGRAM[state.activeDay].slots.find(s => s.slotId === slotId);
+      const lift = state.lifts[exId];
+      if (!slot || !lift) return;
+      const status = getProgressionStatus(slot, lift);
+      const card = document.getElementById(`card_${slotId}`);
+      const badge = document.getElementById(`badge_${slotId}`);
+      if (card) card.classList.toggle('ready-up', status === 'ready');
+      if (badge) {
+        badge.className = `badge ${status === 'ready' ? 'up' : (status === 'hold' ? 'hold' : '')}`;
+        badge.textContent = status === 'ready'
+          ? '▲ ADD +2.5 KG'
+          : (status === 'hold' ? '⏸ HOLD WEIGHT (NOT SMOOTH)' : `Build to ${slot.maxReps} reps`);
+      }
+    }
+
+    function stepWeight(exId, delta) {
+      const lift = state.lifts[exId];
+      const next = Math.max(0, Math.round((Number(lift.weight || 0) + delta) * 10) / 10);
+      lift.weight = next;
+      const inp = document.getElementById(`wt_${exId}`);
+      if (inp) inp.value = next;
+      saveState();
+    }
+
+    function updateWeightDirect(exId, val) {
+      const parsed = parseFloat(val);
+      state.lifts[exId].weight = isNaN(parsed) ? 0 : parsed;
+      saveState();
+    }
+
+    function stepRep(slotId, exId, idx, delta) {
+      const lift = state.lifts[exId];
+      const cur = parseInt(lift.reps[idx], 10);
+      const next = isNaN(cur) ? Math.max(1, delta) : Math.max(0, cur + delta);
+      lift.reps[idx] = String(next);
+      const inp = document.getElementById(`rep_${exId}_${idx}`);
+      if (inp) inp.value = String(next);
+      refreshExerciseCardStatus(slotId, exId);
+      saveState();
+    }
+
+    function updateRepDirect(slotId, exId, idx, val) {
+      state.lifts[exId].reps[idx] = val.replace(/[^0-9]/g, '');
+      refreshExerciseCardStatus(slotId, exId);
+      saveState();
+    }
+
+    function changeSetCount(exId, delta) {
+      const y = window.scrollY;
+      const lift = state.lifts[exId];
+      if (delta > 0 && lift.reps.length < 6) lift.reps.push('');
+      if (delta < 0 && lift.reps.length > 1) lift.reps.pop();
+      saveState();
+      renderWorkoutDay();
+      window.scrollTo(0, y);
+    }
+
+    function toggleCheck(id, val) {
+      state.checks[id] = val;
+      saveState();
+    }
+
+    /* ARCHIVE SESSION DIRECTLY INTO JOURNEY DIARY + PROGRESSION HISTORY */
+    function archiveSession() {
+      const day = state.activeDay;
+      let bumped = 0;
+      let held = 0;
+      const loggedExercises = [];
+
+      PROGRAM[day].slots.forEach(slot => {
+        const activeOpt = getActiveOption(slot);
+        const lift = state.lifts[activeOpt.id];
+        if (lift && lift.reps.some(r => r !== '')) {
+          const status = getProgressionStatus(slot, lift);
+          const repsStr = lift.reps.filter(r => r !== '').join('/');
+          const feelLabel = lift.feel === 'smooth' ? 'Smooth' : (lift.feel === 'hard' ? 'Hard' : 'Grind');
+          loggedExercises.push({
+            name: activeOpt.name,
+            weight: lift.weight,
+            reps: repsStr,
+            feel: feelLabel,
+            note: lift.note || '',
+            progressed: status === 'ready'
+          });
+          lift.history.push({
+            date: todayKey(),
+            weight: lift.weight,
+            reps: [...lift.reps],
+            feel: lift.feel || 'smooth',
+            note: lift.note || ''
+          });
+          if (status === 'ready') {
+            lift.weight = Math.round((Number(lift.weight) + 2.5) * 10) / 10;
+            bumped++;
+          } else if (status === 'hold') {
+            held++;
+          }
+          lift.reps = lift.reps.map(() => '');
+          lift.note = '';
+        }
+      });
+
+      if (loggedExercises.length > 0) {
+        if (!state.workoutArchiveLog) state.workoutArchiveLog = [];
+        state.workoutArchiveLog.unshift({
+          id: Date.now(),
+          date: todayKey(),
+          dayTitle: PROGRAM[day].title,
+          exercises: loggedExercises
+        });
+      }
+
+      saveState();
+      renderWorkoutDay();
+      alert(`Saved to your Journey Diary!\n• ${loggedExercises.length} exercise(s) recorded with your feedback\n• ${bumped} lift(s) progressed by +2.5 kg\n• ${held} lift(s) held steady.`);
+    }
+
+    function copyDayLog() {
+      const day = state.activeDay;
+      const lines = [`*${PROGRAM[day].title}* (${todayKey()})`];
+      PROGRAM[day].slots.forEach(slot => {
+        const activeOpt = getActiveOption(slot);
+        const lift = state.lifts[activeOpt.id];
+        const repsStr = lift.reps.filter(r => r !== '').join('/');
+        if (repsStr) {
+          const notePart = lift.note ? ` — "${lift.note}"` : '';
+          lines.push(`• ${activeOpt.name}: ${lift.weight} kg × ${repsStr} [${lift.feel || 'smooth'}]${notePart}`);
+        }
+      });
+      navigator.clipboard?.writeText(lines.join('\n'));
+      alert('Workout summary copied to clipboard!');
+    }
+
+    /* IDEAL PLAN MATCHER & BLUEPRINT */
+    function initBlueprints() {
+      const sel = document.getElementById('blueprintSelect');
+      sel.innerHTML = IDEAL_BLUEPRINTS.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+      if (state.selectedBlueprintId) sel.value = state.selectedBlueprintId;
+      renderIdealBlueprint();
+    }
+
+    function renderIdealBlueprint() {
+      const sel = document.getElementById('blueprintSelect');
+      state.selectedBlueprintId = sel.value;
+      const bp = IDEAL_BLUEPRINTS.find(b => b.id === state.selectedBlueprintId) || IDEAL_BLUEPRINTS[0];
+
+      const meals = state.mealsByDate[todayKey()] || [];
+      const curKcal = Math.round(meals.reduce((s, m) => s + Number(m.kcal || 0), 0));
+      const curProt = Math.round(meals.reduce((s, m) => s + Number(m.protein || 0), 0));
+      const curSteps = Number(state.stepsByDate[todayKey()] || 0);
+
+      const kcalPct = Math.min(100, Math.round((curKcal / bp.kcal) * 100));
+      const protPct = Math.min(100, Math.round((curProt / bp.protein) * 100));
+      const stepPct = Math.min(100, Math.round((curSteps / bp.steps) * 100));
+
+      document.getElementById('blueprintMeters').innerHTML = `
+        <div class="meter-card">
+          <div class="meter-top"><span>Calories Match</span><span style="color:var(--accent);">${curKcal} / ${bp.kcal} (${kcalPct}%)</span></div>
+          <div class="meter-track"><div class="meter-fill" style="width:${kcalPct}%; background:${curKcal > bp.kcal * 1.06 ? 'var(--amber)' : 'var(--accent)'};"></div></div>
+        </div>
+        <div class="meter-card">
+          <div class="meter-top"><span>Protein Match</span><span style="color:var(--green);">${curProt}g / ${bp.protein}g (${protPct}%)</span></div>
+          <div class="meter-track"><div class="meter-fill" style="width:${protPct}%; background:var(--green);"></div></div>
+        </div>
+        <div class="meter-card">
+          <div class="meter-top"><span>Steps Match</span><span style="color:var(--blue);">${curSteps.toLocaleString()} / ${bp.steps.toLocaleString()} (${stepPct}%)</span></div>
+          <div class="meter-track"><div class="meter-fill" style="width:${stepPct}%; background:var(--blue);"></div></div>
+        </div>
+      `;
+
+      document.getElementById('blueprintSlotsList').innerHTML = bp.meals.map((m, i) => `
+        <div class="bp-slot">
+          <div style="min-width:0; flex:1 1 auto;">
+            <div style="font-size:10px; font-weight:800; color:var(--accent); text-transform:uppercase;">${m.slot}</div>
+            <div style="font-weight:700;">${m.item}</div>
+            <div style="font-size:11px; color:var(--muted);">${m.kcal} kcal • ${m.p}g P • ${m.c}g C • ${m.f}g F</div>
+          </div>
+          <button type="button" class="btn btn-primary" style="padding:6px 10px;" onclick="logBlueprintSlot('${bp.id}', ${i})">+ Log</button>
+        </div>
+      `).join('');
+    }
+
+    function logBlueprintSlot(bpId, idx) {
+      const bp = IDEAL_BLUEPRINTS.find(b => b.id === bpId);
+      if (!bp || !bp.meals[idx]) return;
+      const m = bp.meals[idx];
+      quickAddMeal(m.item, m.kcal, m.p, m.c, m.f);
+    }
+
+    /* OFFLINE FOOD & GRAM CALCULATOR */
+    function initFoodDb() {
+      const sel = document.getElementById('foodDbSelect');
+      sel.innerHTML = FOOD_DB.map(f => `<option value="${f.id}">${f.name}</option>`).join('');
+      onFoodSelectChange();
+    }
+
+    function onFoodSelectChange() {
+      const item = FOOD_DB.find(f => f.id === document.getElementById('foodDbSelect').value) || FOOD_DB[0];
+      document.getElementById('foodQtyLabel').textContent = `Amount (${item.unit})`;
+      const inp = document.getElementById('foodQtyInput');
+      inp.step = item.step || 1;
+      inp.value = item.defaultQty;
+      updateFoodCalcPreview();
+    }
+
+    function bumpFoodQty(delta) {
+      const item = FOOD_DB.find(f => f.id === document.getElementById('foodDbSelect').value) || FOOD_DB[0];
+      const inp = document.getElementById('foodQtyInput');
+      const add = item.per100 ? delta : 1;
+      inp.value = Math.max(0, (parseFloat(inp.value) || 0) + add);
+      updateFoodCalcPreview();
+    }
+
+    function computeFoodMacros() {
+      const item = FOOD_DB.find(f => f.id === document.getElementById('foodDbSelect').value) || FOOD_DB[0];
+      const qty = Math.max(0, parseFloat(document.getElementById('foodQtyInput').value) || 0);
+      const mult = item.per100 ? (qty / 100) : qty;
+      return {
+        label: `${item.name.split('(')[0].trim()} (${qty}${item.unit === 'g' ? 'g' : ' ' + item.unit})`,
+        kcal: Math.round(item.kcal * mult),
+        protein: Math.round(item.p * mult * 10) / 10,
+        carbs: Math.round(item.c * mult * 10) / 10,
+        fat: Math.round(item.f * mult * 10) / 10
+      };
+    }
+
+    function updateFoodCalcPreview() {
+      const m = computeFoodMacros();
+      document.getElementById('foodCalcSummary').textContent = `${m.kcal} kcal • ${m.protein}g P • ${m.carbs}g C • ${m.fat}g F`;
+    }
+
+    function logCalculatedFood() {
+      const m = computeFoodMacros();
+      if (m.kcal <= 0 && m.protein <= 0) return;
+      quickAddMeal(m.label, m.kcal, Math.round(m.protein), Math.round(m.carbs), Math.round(m.fat));
+    }
+
+    /* NUTRITION & SNAP FOOD */
+    function setFatMode(bonus) {
+      state.fatBonus = bonus;
+      document.querySelectorAll('.fat-pill').forEach(p => {
+        p.classList.toggle('active', Number(p.dataset.fat) === bonus);
+      });
+      saveState();
+    }
+
+    function showFoodStatus(msg) {
+      const el = document.getElementById('foodStatus');
+      el.textContent = msg;
+      el.classList.add('show');
+    }
+
+    function quickAddMeal(name, kcal, protein, carbs, fat) {
+      const key = todayKey();
+      if (!state.mealsByDate[key]) state.mealsByDate[key] = [];
+      state.mealsByDate[key].push({ id: Date.now(), name, kcal, protein, carbs, fat });
+      saveState();
+      renderIdealBlueprint();
+      renderMeals();
+    }
+
+    function addManualMeal() {
+      const name = document.getElementById('manName').value.trim();
+      const kcal = parseFloat(document.getElementById('manKcal').value);
+      const prot = parseFloat(document.getElementById('manProt').value) || 0;
+      if (!name || isNaN(kcal)) return;
+      quickAddMeal(name, Math.round(kcal), Math.round(prot), 0, 0);
+      document.getElementById('manName').value = '';
+      document.getElementById('manKcal').value = '';
+      document.getElementById('manProt').value = '';
+    }
+
+    function removeMeal(id) {
+      const key = todayKey();
+      state.mealsByDate[key] = (state.mealsByDate[key] || []).filter(m => m.id !== id);
+      saveState();
+      renderIdealBlueprint();
+      renderMeals();
+    }
+
+    function clearTodayMeals() {
+      state.mealsByDate[todayKey()] = [];
+      saveState();
+      renderIdealBlueprint();
+      renderMeals();
+    }
+
+    function renderMeals() {
+      const meals = state.mealsByDate[todayKey()] || [];
+      const list = document.getElementById('mealsList');
+      if (!meals.length) {
+        list.innerHTML = '<div style="font-size:12px; color:var(--muted);">No meals logged yet today.</div>';
+        return;
+      }
+      list.innerHTML = meals.map(m => `
+        <div class="meal-item">
+          <div>
+            <div style="font-weight:700;">${m.name}</div>
+            <div style="font-size:11px; color:var(--muted);">${m.kcal} kcal • ${m.protein}g P • ${m.carbs}g C • ${m.fat}g F</div>
+          </div>
+          <button class="btn btn-danger" style="padding:4px 8px;" onclick="removeMeal(${m.id})">✕</button>
+        </div>
+      `).join('');
+    }
+
+    async function callGemini(parts) {
+      if (!state.apiKey || state.apiKey.trim().length < 10) {
+        throw new Error('Please paste your free Google AI Studio API key in Settings & Sync first.');
+      }
+      const primary = state.model || 'gemini-2.5-flash';
+      const candidates = [primary, 'gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-3.5-flash-lite']
+        .filter((v, i, arr) => arr.indexOf(v) === i);
+
+      let lastErr = null;
+      for (const model of candidates) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(state.apiKey.trim())}`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts }] })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        }
+        lastErr = data.error?.message || `API Error ${res.status}`;
+        if (res.status === 503 || res.status === 429 || /high demand|overloaded|quota/i.test(lastErr)) {
+          continue;
+        }
+        throw new Error(lastErr);
+      }
+      throw new Error(lastErr || 'All Gemini models are temporarily busy. Use the Ideal Plan or Offline Food Calculator above!');
+    }
+
+    function extractJson(text) {
+      const clean = text.replace(/```json|```/gi, '').trim();
+      const start = clean.indexOf('{');
+      const end = clean.lastIndexOf('}');
+      if (start === -1 || end === -1) throw new Error('Could not parse macro JSON from AI response.');
+      return JSON.parse(clean.slice(start, end + 1));
+    }
+
+    async function analyzeTextMeal() {
+      const promptText = document.getElementById('mealPrompt').value.trim();
+      if (!promptText) return showFoodStatus('Enter a meal description or snap/upload a food photo.');
+      try {
+        showFoodStatus('Analyzing Indian meal macros with Gemini...');
+        const instruction = `Estimate macros for this Indian meal: "${promptText}". Account for realistic cooking oil/ghee. Return ONLY strict JSON: {"name":"short meal title","kcal":number,"protein":number,"carbs":number,"fat":number}`;
+        const raw = await callGemini([{ text: instruction }]);
+        const parsed = extractJson(raw);
+        const bonus = Number(state.fatBonus || 0);
+        quickAddMeal(
+          bonus > 0 ? `${parsed.name} (+Tadka/Ghee)` : parsed.name,
+          Math.round(parsed.kcal + bonus),
+          Math.round(parsed.protein),
+          Math.round(parsed.carbs),
+          Math.round(parsed.fat + bonus / 9)
+        );
+        document.getElementById('mealPrompt').value = '';
+        showFoodStatus(`Logged: ${parsed.name} (${Math.round(parsed.kcal + bonus)} kcal, ${Math.round(parsed.protein)}g protein).`);
+      } catch (err) {
+        showFoodStatus(`Error: ${err.message}`);
+      }
+    }
+
+    function compressImageToBase64(file, maxDim = 1024, quality = 0.82) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('Failed to read image file.'));
+        reader.onload = () => {
+          const img = new Image();
+          img.onerror = () => reject(new Error('Unsupported image format.'));
+          img.onload = () => {
+            let w = img.width;
+            let h = img.height;
+            if (w > maxDim || h > maxDim) {
+              if (w > h) {
+                h = Math.round((h * maxDim) / w);
+                w = maxDim;
+              } else {
+                w = Math.round((w * maxDim) / h);
+                h = maxDim;
+              }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            const dataUrl = canvas.toDataURL('image/jpeg', quality);
+            resolve(dataUrl.split(',')[1]);
+          };
+          img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handleFoodImage(event) {
+      const file = event.target.files?.[0];
+      event.target.value = '';
+      if (!file) return;
+      try {
+        showFoodStatus('Compressing photo for fast mobile upload...');
+        const base64 = await compressImageToBase64(file);
+        const note = document.getElementById('mealPrompt').value.trim();
+        showFoodStatus('Analyzing food photo with Gemini Vision...');
+        const instruction = `Identify all food items in this photo (Indian home/restaurant context). ${note ? 'User note: ' + note : ''} Return ONLY strict JSON: {"name":"short meal summary","kcal":number,"protein":number,"carbs":number,"fat":number}`;
+        const raw = await callGemini([
+          { text: instruction },
+          { inlineData: { mimeType: 'image/jpeg', data: base64 } }
+        ]);
+        const parsed = extractJson(raw);
+        const bonus = Number(state.fatBonus || 0);
+        quickAddMeal(
+          bonus > 0 ? `${parsed.name} (+Tadka/Ghee)` : parsed.name,
+          Math.round(parsed.kcal + bonus),
+          Math.round(parsed.protein),
+          Math.round(parsed.carbs),
+          Math.round(parsed.fat + bonus / 9)
+        );
+        document.getElementById('mealPrompt').value = '';
+        showFoodStatus(`Snap Logged: ${parsed.name} (${Math.round(parsed.kcal + bonus)} kcal, ${Math.round(parsed.protein)}g protein).`);
+      } catch (err) {
+        showFoodStatus(`Snap Food Error: ${err.message}`);
+      }
+    }
+
+    /* SVG CHART ENGINE */
+    function renderLineSvg(points, targetVal, unit, strokeColor = '#c8ff00') {
+      if (!points.length) {
+        return `<div style="height:155px; display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--muted);">No data logged yet</div>`;
+      }
+      const W = 380, H = 155, padL = 36, padR = 16, padT = 18, padB = 26;
+      const plotW = W - padL - padR;
+      const plotH = H - padT - padB;
+      const vals = points.map(p => Number(p.val));
+      if (targetVal !== null && !isNaN(targetVal)) vals.push(Number(targetVal));
+      let minV = Math.min(...vals);
+      let maxV = Math.max(...vals);
+      if (minV === maxV) { minV -= 2; maxV += 2; }
+      const range = maxV - minV;
+
+      const getX = i => points.length === 1 ? padL + plotW / 2 : padL + (i / (points.length - 1)) * plotW;
+      const getY = v => padT + plotH - ((v - minV) / range) * plotH;
+
+      let targetLine = '';
+      if (targetVal !== null && !isNaN(targetVal)) {
+        const ty = getY(targetVal).toFixed(1);
+        targetLine = `
+          <line x1="${padL}" y1="${ty}" x2="${W - padR}" y2="${ty}" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="4 3" />
+          <text x="${W - padR}" y="${ty - 4}" fill="#38bdf8" font-size="9" text-anchor="end">Goal ${targetVal}${unit}</text>
+        `;
+      }
+
+      const poly = points.map((p, i) => `${getX(i).toFixed(1)},${getY(p.val).toFixed(1)}`).join(' ');
+      const dots = points.map((p, i) => {
+        const cx = getX(i).toFixed(1);
+        const cy = getY(p.val).toFixed(1);
+        const showLbl = points.length <= 8 || i === 0 || i === points.length - 1 || i % Math.ceil(points.length / 5) === 0;
+        return `
+          <circle cx="${cx}" cy="${cy}" r="4" fill="${strokeColor}" stroke="#0b0d10" stroke-width="1.5" />
+          ${showLbl ? `<text x="${cx}" y="${cy - 7}" fill="#f3f5f8" font-size="9.5" font-weight="700" text-anchor="middle">${p.val}</text>` : ''}
+          ${showLbl ? `<text x="${cx}" y="${H - 6}" fill="#9aa4b2" font-size="9" text-anchor="middle">${p.label}</text>` : ''}
+        `;
+      }).join('');
+
+      return `
+        <svg viewBox="0 0 ${W} ${H}">
+          <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${H - padB}" stroke="#2a323e" stroke-width="1" />
+          <line x1="${padL}" y1="${H - padB}" x2="${W - padR}" y2="${H - padB}" stroke="#2a323e" stroke-width="1" />
+          <text x="${padL - 4}" y="${padT + 4}" fill="#9aa4b2" font-size="9" text-anchor="end">${maxV.toFixed(1)}</text>
+          <text x="${padL - 4}" y="${H - padB}" fill="#9aa4b2" font-size="9" text-anchor="end">${minV.toFixed(1)}</text>
+          ${targetLine}
+          ${points.length > 1 ? `<polyline fill="none" stroke="${strokeColor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${poly}" />` : ''}
+          ${dots}
+        </svg>
+      `;
+    }
+
+    function renderBarSvg(daysData, targetVal, mode = 'min') {
+      const W = 380, H = 155, padL = 36, padR = 12, padT = 18, padB = 26;
+      const plotW = W - padL - padR;
+      const plotH = H - padT - padB;
+      const vals = daysData.map(d => d.val);
+      const maxV = Math.max(...vals, targetVal || 1, 1);
+      const getY = v => padT + plotH - (v / maxV) * plotH;
+      const barW = Math.max(8, (plotW / daysData.length) - 4);
+
+      const ty = getY(targetVal).toFixed(1);
+      const targetLine = `
+        <line x1="${padL}" y1="${ty}" x2="${W - padR}" y2="${ty}" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="4 3" />
+      `;
+
+      const bars = daysData.map((d, i) => {
+        const x = padL + (i * (plotW / daysData.length)) + 2;
+        const y = getY(d.val);
+        const h = Math.max(2, (H - padB) - y);
+        let fill = '#2a323e';
+        if (d.val > 0) {
+          if (mode === 'max') fill = d.val <= targetVal * 1.05 ? '#22c55e' : '#f59e0b';
+          else fill = d.val >= targetVal * 0.9 ? '#22c55e' : '#f59e0b';
+        }
+        const showLbl = i === 0 || i === daysData.length - 1 || i % 3 === 0;
+        return `
+          <rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="${fill}" />
+          ${d.val > 0 && showLbl ? `<text x="${(x + barW / 2).toFixed(1)}" y="${Math.max(11, y - 4).toFixed(1)}" fill="#f3f5f8" font-size="8.5" font-weight="700" text-anchor="middle">${d.shortVal}</text>` : ''}
+          ${showLbl ? `<text x="${(x + barW / 2).toFixed(1)}" y="${H - 6}" fill="#9aa4b2" font-size="8.5" text-anchor="middle">${d.label}</text>` : ''}
+        `;
+      }).join('');
+
+      return `
+        <svg viewBox="0 0 ${W} ${H}">
+          <line x1="${padL}" y1="${H - padB}" x2="${W - padR}" y2="${H - padB}" stroke="#2a323e" stroke-width="1" />
+          <text x="${padL - 4}" y="${padT + 4}" fill="#9aa4b2" font-size="8.5" text-anchor="end">${Math.round(maxV)}</text>
+          ${bars}
+          ${targetLine}
+        </svg>
+      `;
+    }
+
+    function getLastNDaysKeys(n = 14) {
+      const out = [];
+      for (let i = n - 1; i >= 0; i--) {
+        const iso = dateOffsetKey(-i);
+        out.push({ iso, label: shortDateLabel(iso) });
+      }
+      return out;
+    }
+
+    function populateLiftChartSelect() {
+      const sel = document.getElementById('liftChartSelect');
+      const prev = sel.value;
+      const items = [];
+      ['mon', 'tue', 'wed', 'thu', 'fri'].forEach(day => {
+        PROGRAM[day].slots.forEach(slot => {
+          const activeOpt = getActiveOption(slot);
+          items.push({ id: activeOpt.id, label: `[${day.toUpperCase()}] ${activeOpt.name}` });
+        });
+      });
+      sel.innerHTML = items.map(it => `<option value="${it.id}">${it.label}</option>`).join('');
+      if (prev && items.some(i => i.id === prev)) sel.value = prev;
+    }
+
+    function renderAllCharts() {
+      populateLiftChartSelect();
+
+      const liftId = document.getElementById('liftChartSelect').value || 'mon_ex1';
+      const lift = state.lifts[liftId] || { weight: 0, history: [] };
+      const liftPts = (lift.history || []).map(h => ({
+        label: shortDateLabel(h.date),
+        val: Number(h.weight)
+      }));
+      liftPts.push({ label: 'Now', val: Number(lift.weight || 0) });
+      const firstWt = liftPts[0]?.val ?? 0;
+      const curWt = liftPts[liftPts.length - 1]?.val ?? 0;
+      const deltaWt = Math.round((curWt - firstWt) * 10) / 10;
+      document.getElementById('liftChartKpi').textContent = `${curWt} kg (${deltaWt >= 0 ? '+' + deltaWt : deltaWt} kg)`;
+      document.getElementById('chartLiftWrap').innerHTML = renderLineSvg(liftPts, null, 'kg', '#c8ff00');
+
+      const sortedWeights = [...state.weightsLog].sort((a, b) => a.date.localeCompare(b.date));
+      const wtPts = sortedWeights.slice(-14).map(w => ({
+        label: shortDateLabel(w.date),
+        val: Number(w.kg)
+      }));
+      const latestWt = wtPts.length ? wtPts[wtPts.length - 1].val : 87.2;
+      document.getElementById('weightChartKpi').textContent = `${latestWt} kg → ${state.targets.goalWeight} kg`;
+      document.getElementById('chartWeightWrap').innerHTML = renderLineSvg(wtPts, Number(state.targets.goalWeight), 'kg', '#22c55e');
+
+      const days14 = getLastNDaysKeys(14);
+      const kcalData = days14.map(d => {
+        const sum = Math.round((state.mealsByDate[d.iso] || []).reduce((s, m) => s + Number(m.kcal || 0), 0));
+        return { label: d.label, val: sum, shortVal: sum >= 1000 ? (sum / 1000).toFixed(1) + 'k' : String(sum) };
+      });
+      const protData = days14.map(d => {
+        const sum = Math.round((state.mealsByDate[d.iso] || []).reduce((s, m) => s + Number(m.protein || 0), 0));
+        return { label: d.label, val: sum, shortVal: `${sum}g` };
+      });
+      const stepsData = days14.map(d => {
+        const val = Number(state.stepsByDate[d.iso] || 0);
+        return { label: d.label, val, shortVal: val >= 1000 ? (val / 1000).toFixed(1) + 'k' : String(val) };
+      });
+
+      document.getElementById('kcalChartKpi').textContent = `Target: ${state.targets.kcal} kcal`;
+      document.getElementById('chartKcalWrap').innerHTML = renderBarSvg(kcalData, Number(state.targets.kcal), 'max');
+
+      document.getElementById('protChartKpi').textContent = `Floor: ${state.targets.protein}g`;
+      document.getElementById('chartProtWrap').innerHTML = renderBarSvg(protData, Number(state.targets.protein), 'min');
+
+      document.getElementById('stepsChartKpi').textContent = `Goal: 10,000 steps`;
+      document.getElementById('chartStepsWrap').innerHTML = renderBarSvg(stepsData, 10000, 'min');
+    }
+
+    /* PREVIOUS DAYS STEPS & WEIGHT LOGGING */
+    function initDatePickers() {
+      const today = todayKey();
+      const wDate = document.getElementById('weightDateInput');
+      const sDate = document.getElementById('stepsDateInput');
+      const dDate = document.getElementById('diaryDateInput');
+      if (wDate && !wDate.value) wDate.value = today;
+      if (dDate && !dDate.value) dDate.value = today;
+      if (sDate && !sDate.value) {
+        sDate.value = today;
+        onStepsDateChange();
+      }
+    }
+
+    function setStepsDateOffset(offsetDays) {
+      const targetIso = dateOffsetKey(offsetDays);
+      document.getElementById('stepsDateInput').value = targetIso;
+      onStepsDateChange();
+    }
+
+    function onStepsDateChange() {
+      const iso = document.getElementById('stepsDateInput').value || todayKey();
+      const existing = state.stepsByDate[iso];
+      document.getElementById('stepsInput').value = existing !== undefined ? existing : '';
+    }
+
+    function logWeight() {
+      const val = parseFloat(document.getElementById('weightInput').value);
+      const d = document.getElementById('weightDateInput').value || todayKey();
+      if (!val || val < 40 || val > 200) return;
+      const label = shortDateLabel(d);
+      state.weightsLog = state.weightsLog.filter(w => w.date !== d);
+      state.weightsLog.push({ date: d, label, kg: val });
+      state.weightsLog.sort((a, b) => a.date.localeCompare(b.date));
+      document.getElementById('weightInput').value = '';
+      saveState();
+      renderRecomp();
+    }
+
+    function logSteps() {
+      const val = parseInt(document.getElementById('stepsInput').value, 10);
+      const d = document.getElementById('stepsDateInput').value || todayKey();
+      if (isNaN(val) || val < 0) return;
+      state.stepsByDate[d] = val;
+      saveState();
+      renderRecomp();
+    }
+
+    function deleteStepDay(iso) {
+      delete state.stepsByDate[iso];
+      saveState();
+      renderRecomp();
+    }
+
+    function renderRecentStepsChips() {
+      const el = document.getElementById('recentStepsLog');
+      const entries = Object.entries(state.stepsByDate)
+        .filter(([, v]) => Number(v) > 0)
+        .sort((a, b) => b[0].localeCompare(a[0]))
+        .slice(0, 7);
+      if (!entries.length) {
+        el.innerHTML = '<span style="font-size:11px; color:var(--muted);">No step counts logged yet. Use Today / Yesterday / -2d above to log.</span>';
+        return;
+      }
+      el.innerHTML = entries.map(([iso, val]) => `
+        <span class="chip-btn active" style="display:inline-flex; align-items:center; gap:5px; cursor:default;">
+          ${shortDateLabel(iso)}: <strong>${Number(val).toLocaleString()}</strong>
+          <button type="button" onclick="deleteStepDay('${iso}')" style="background:none; border:none; color:#fca5a5; font-weight:800; cursor:pointer; padding:0 2px;">×</button>
+        </span>
+      `).join('');
+    }
+
+    /* UNIFIED DIGITAL TRANSFORMATION DIARY (DAY 1 -> GOAL) */
+    function saveDiaryEntry() {
+      const note = document.getElementById('diaryNote').value.trim();
+      const mood = document.getElementById('diaryMood').value;
+      const videoUrl = document.getElementById('diaryVideoLink').value.trim();
+      const dateIso = document.getElementById('diaryDateInput').value || todayKey();
+      if (!note && !videoUrl) return;
+      state.diaryLog.unshift({
+        id: Date.now(),
+        date: dateIso,
+        label: shortDateLabel(dateIso),
+        mood,
+        note,
+        videoUrl
+      });
+      document.getElementById('diaryNote').value = '';
+      document.getElementById('diaryVideoLink').value = '';
+      saveState();
+      renderJourneyTimeline();
+    }
+
+    function deleteDiaryEntry(id) {
+      state.diaryLog = state.diaryLog.filter(e => e.id !== id);
+      saveState();
+      renderJourneyTimeline();
+    }
+
+    function buildUnifiedTimelineDays() {
+      const allDates = new Set();
+      (state.weightsLog || []).forEach(w => allDates.add(w.date));
+      Object.keys(state.stepsByDate || {}).forEach(d => allDates.add(d));
+      Object.keys(state.mealsByDate || {}).forEach(d => {
+        if ((state.mealsByDate[d] || []).length > 0) allDates.add(d);
+      });
+      (state.diaryLog || []).forEach(e => allDates.add(e.date));
+      (state.workoutArchiveLog || []).forEach(w => allDates.add(w.date));
+
+      const sortedAsc = Array.from(allDates).sort((a, b) => a.localeCompare(b));
+      if (!sortedAsc.length) return [];
+      const firstMs = new Date(sortedAsc[0] + 'T00:00:00').getTime();
+
+      return sortedAsc.map(iso => {
+        const curMs = new Date(iso + 'T00:00:00').getTime();
+        const dayNum = Math.round((curMs - firstMs) / (24 * 60 * 60 * 1000)) + 1;
+        const wt = (state.weightsLog || []).find(w => w.date === iso);
+        const steps = state.stepsByDate?.[iso];
+        const meals = state.mealsByDate?.[iso] || [];
+        const kcal = Math.round(meals.reduce((s, m) => s + Number(m.kcal || 0), 0));
+        const prot = Math.round(meals.reduce((s, m) => s + Number(m.protein || 0), 0));
+        const diaries = (state.diaryLog || []).filter(e => e.date === iso);
+        const archives = (state.workoutArchiveLog || []).filter(w => w.date === iso);
+
+        const activeTodayLifts = [];
+        if (iso === todayKey()) {
+          const day = state.activeDay;
+          PROGRAM[day].slots.forEach(slot => {
+            const opt = getActiveOption(slot);
+            const lift = state.lifts[opt.id];
+            if (lift && lift.reps.some(r => r !== '')) {
+              activeTodayLifts.push({
+                name: opt.name,
+                weight: lift.weight,
+                reps: lift.reps.filter(r => r !== '').join('/'),
+                feel: lift.feel === 'smooth' ? 'Smooth' : (lift.feel === 'hard' ? 'Hard' : 'Grind'),
+                note: lift.note || ''
+              });
+            }
+          });
+        }
+
+        return { iso, dayNum, label: shortDateLabel(iso), wt, steps, kcal, prot, diaries, archives, activeTodayLifts };
+      }).reverse();
+    }
+
+    function renderJourneyTimeline() {
+      const el = document.getElementById('journeyTimeline');
+      const days = buildUnifiedTimelineDays();
+      if (!days.length) {
+        el.innerHTML = '<div class="card" style="font-size:12px; color:var(--muted);">Your journey story will build automatically as you log weights, workouts, meals, and reflections.</div>';
+        return;
+      }
+
+      el.innerHTML = days.map(d => {
+        const pills = [];
+        if (d.wt) pills.push(`<span class="tl-pill" style="color:var(--green); border-color:rgba(34,197,94,0.4);">⚖️ ${d.wt.kg} kg</span>`);
+        if (d.steps) pills.push(`<span class="tl-pill" style="color:var(--blue);">👟 ${Number(d.steps).toLocaleString()} steps</span>`);
+        if (d.kcal > 0) pills.push(`<span class="tl-pill">🔥 ${d.kcal} kcal • ${d.prot}g P</span>`);
+
+        const diaryHtml = d.diaries.map(entry => `
+          <div style="margin-bottom:6px; padding-bottom:6px; border-bottom:1px solid var(--border);">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+              <span style="font-size:11.5px; font-weight:800; color:var(--text);">${entry.mood}</span>
+              <button type="button" class="btn btn-danger" style="padding:2px 6px; font-size:10px;" onclick="deleteDiaryEntry(${entry.id})">✕</button>
+            </div>
+            ${entry.note ? `<div style="font-size:13px; color:var(--text); margin-top:3px;">${entry.note}</div>` : ''}
+            ${entry.videoUrl ? `<div style="margin-top:4px;"><a href="${entry.videoUrl}" target="_blank" rel="noopener" style="color:var(--blue); font-size:12px; font-weight:700;">🎥 Watch Form-Check / Progress Video ↗</a></div>` : ''}
+          </div>
+        `).join('');
+
+        const archivedWorkoutHtml = d.archives.map(w => `
+          <div class="tl-lifts">
+            <div style="font-weight:800; color:var(--accent); margin-bottom:4px;">🏋️ ${w.dayTitle}</div>
+            ${w.exercises.map(ex => `
+              <div style="margin-bottom:3px;">
+                • <strong>${ex.name}</strong>: ${ex.weight} kg × ${ex.reps} <span style="color:var(--muted);">[${ex.feel}]</span>
+                ${ex.note ? `<span style="color:var(--blue); font-style:italic;"> — "${ex.note}"</span>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        `).join('');
+
+        const activeWorkoutHtml = d.activeTodayLifts.length ? `
+          <div class="tl-lifts">
+            <div style="font-weight:800; color:var(--blue); margin-bottom:4px;">🏋️ Current Session (${PROGRAM[state.activeDay].title})</div>
+            ${d.activeTodayLifts.map(ex => `
+              <div style="margin-bottom:3px;">
+                • <strong>${ex.name}</strong>: ${ex.weight} kg × ${ex.reps} <span style="color:var(--muted);">[${ex.feel}]</span>
+                ${ex.note ? `<span style="color:var(--accent); font-style:italic;"> — "${ex.note}"</span>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        ` : '';
+
+        return `
+          <div class="timeline-card">
+            <div class="tl-head">
+              <span class="tl-day-badge">DAY ${d.dayNum} • ${d.label} (${d.iso})</span>
+            </div>
+            ${pills.length ? `<div class="tl-pills">${pills.join('')}</div>` : ''}
+            ${diaryHtml}
+            ${archivedWorkoutHtml}
+            ${activeWorkoutHtml}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function copyFullStory() {
+      const days = buildUnifiedTimelineDays().reverse();
+      const lines = ['*ROHIT — RECOMP & 30 PULL-UPS DIGITAL DIARY*'];
+      days.forEach(d => {
+        lines.push(`\n*Day ${d.dayNum} (${d.label}):*`);
+        if (d.wt) lines.push(`- Fasted Weight: ${d.wt.kg} kg`);
+        if (d.steps) lines.push(`- Steps: ${Number(d.steps).toLocaleString()}`);
+        if (d.kcal > 0) lines.push(`- Nutrition: ${d.kcal} kcal | ${d.prot}g protein`);
+        d.diaries.forEach(e => {
+          lines.push(`- Journal [${e.mood}]: ${e.note}`);
+        });
+        d.archives.forEach(w => {
+          lines.push(`- Workout (${w.dayTitle}):`);
+          w.exercises.forEach(ex => {
+            lines.push(`  • ${ex.name}: ${ex.weight}kg × ${ex.reps} (${ex.feel})${ex.note ? ' — ' + ex.note : ''}`);
+          });
+        });
+      });
+      navigator.clipboard?.writeText(lines.join('\n'));
+      alert('Full Day 1 → Today transformation story copied to clipboard!');
+    }
+
+    function setPullupStage(id) {
+      state.pullupStage = id;
+      saveState();
+      renderRecomp();
+    }
+
+    function renderRecomp() {
+      initDatePickers();
+      renderRecentStepsChips();
+      renderAllCharts();
+      document.getElementById('stageGrid').innerHTML = PULLUP_STAGES.map(s => `
+        <div class="stage-card ${state.pullupStage === s.id ? 'active' : ''}" onclick="setPullupStage(${s.id})">
+          <div style="font-weight:800; font-size:13px; color:${state.pullupStage === s.id ? 'var(--accent)' : 'var(--text)'};">${s.title}</div>
+          <div style="font-size:12px; color:var(--muted); margin-top:3px;">${s.desc}</div>
+        </div>
+      `).join('');
+    }
+
+    async function runAiCoach() {
+      const out = document.getElementById('coachOutput');
+      try {
+        out.textContent = 'Running recomp & progressive overload audit...';
+        const summary = {
+          weights: state.weightsLog.slice(-7),
+          recentSteps: state.stepsByDate,
+          todayMacros: state.mealsByDate[todayKey()] || [],
+          targets: state.targets,
+          pullupStage: state.pullupStage,
+          selectedSwaps: state.selectedOptionBySlot,
+          lifts: state.lifts
+        };
+        const prompt = `You are Rohit's direct strength & recomp coach. Goal: 88.7kg -> 82.5kg by Feb 2027, and 30 strict pull-ups by Feb 28, 2028. Analyze his current logs (including whether lifts felt smooth vs hard/grind, written feedback, steps, and macros) and give 3 crisp, actionable adjustments (no fluff): ${JSON.stringify(summary)}`;
+        const reply = await callGemini([{ text: prompt }]);
+        out.textContent = reply;
+      } catch (err) {
+        out.textContent = `Audit Error: ${err.message}`;
+      }
+    }
+
+    /* SETTINGS & BACKUP */
+    function openSettings() {
+      const cfg = getCloudCfg();
+      document.getElementById('cfgGistId').value = cfg.gistId || '';
+      document.getElementById('cfgGistToken').value = cfg.gistToken || '';
+      document.getElementById('cfgApiKey').value = state.apiKey || '';
+      document.getElementById('cfgModel').value = state.model || 'gemini-2.5-flash';
+      document.getElementById('cfgKcal').value = state.targets.kcal;
+      document.getElementById('cfgProt').value = state.targets.protein;
+      document.getElementById('cfgGoalKg').value = state.targets.goalWeight;
+      document.getElementById('settingsModal').classList.add('open');
+    }
+
+    function closeSettings() {
+      document.getElementById('settingsModal').classList.remove('open');
+    }
+
+    function saveSettings() {
+      const gistId = document.getElementById('cfgGistId').value.trim();
+      const gistToken = document.getElementById('cfgGistToken').value.trim();
+      saveCloudCfg({ gistId, gistToken });
+
+      state.apiKey = document.getElementById('cfgApiKey').value.trim();
+      state.model = document.getElementById('cfgModel').value;
+      state.targets.kcal = Number(document.getElementById('cfgKcal').value) || 2300;
+      state.targets.protein = Number(document.getElementById('cfgProt').value) || 185;
+      state.targets.goalWeight = Number(document.getElementById('cfgGoalKg').value) || 82.5;
+      saveState();
+      renderIdealBlueprint();
+      closeSettings();
+      if (gistId && gistToken) syncWithGist(false);
+    }
+
+    function exportBackup() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `progressive_lift_backup_${todayKey()}.json`;
+      a.click();
+    }
+
+    function importBackup(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          state = deepMergeBackup(state, data);
+          saveState();
+          renderWorkoutDay();
+          renderIdealBlueprint();
+          renderMeals();
+          renderRecomp();
+          renderJourneyTimeline();
+          closeSettings();
+          alert('JSON Backup restored & merged!');
+        } catch (e) {
+          alert('Invalid JSON backup file.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    /* BOOT */
+    initBlueprints();
+    initFoodDb();
+    initDatePickers();
+    updateSummaryBar();
+    switchDay(state.activeDay || 'thu');
+    switchMainTab(state.mainTab || 'workout');
+    syncWithGist(false);
+  </script>
+</body>
+</html>
