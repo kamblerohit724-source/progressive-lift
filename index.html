@@ -200,10 +200,10 @@
       color: var(--muted);
     }
 
-    /* Main Nav Tabs */
+    /* Main Nav Tabs (4 Tabs) */
     .main-tabs {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 6px;
       background: var(--surface);
       border: 1.5px solid var(--border);
@@ -212,12 +212,18 @@
       margin-bottom: 12px;
     }
 
+    @media (max-width: 600px) {
+      .main-tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
     .main-tab {
       border: none;
       background: transparent;
       color: var(--muted);
       font-weight: 700;
-      font-size: 13px;
+      font-size: 12.5px;
       padding: 10px 6px;
       border-radius: 10px;
       cursor: pointer;
@@ -559,11 +565,12 @@
       font-weight: 800;
     }
 
-    /* Session Feedback Gate */
+    /* Session Feedback Gate + Written Note */
     .feedback-bar {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 6px;
+      margin-bottom: 8px;
     }
 
     .fb-btn {
@@ -594,6 +601,69 @@
       border-color: var(--red);
       background: rgba(239, 68, 68, 0.16);
       color: #fca5a5;
+    }
+
+    .fb-note-input {
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 9px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    /* Digital Transformation Diary Timeline */
+    .timeline-card {
+      position: relative;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 13px 14px;
+      margin-bottom: 10px;
+    }
+
+    .tl-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .tl-day-badge {
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: 0.3px;
+    }
+
+    .tl-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+
+    .tl-pill {
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 7px;
+      color: var(--muted);
+    }
+
+    .tl-lifts {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 10px;
+      font-size: 12px;
+      margin-top: 6px;
     }
 
     /* Ideal Plan Matcher */
@@ -892,16 +962,6 @@
       background: rgba(200, 255, 0, 0.08);
     }
 
-    /* Diary Entries */
-    .diary-entry {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      font-size: 13px;
-    }
-
     /* Modal */
     .modal-backdrop {
       position: fixed;
@@ -961,7 +1021,7 @@
           <div class="brand-title-row">
             <span class="brand-title">PROGRESSIVE LIFT OS</span>
             <span id="apiStatusPill" class="api-pill">AI KEY NEEDED</span>
-            <span id="cloudStatusPill" class="api-pill cloud" onclick="syncWithGist(true)" title="Tap to force sync across phone & desktop">☁️ LOCAL ONLY</span>
+            <span id="cloudStatusPill" class="api-pill cloud" onclick="syncWithGist(true)" title="Tap to sync across phone & desktop">☁️ LOCAL ONLY</span>
           </div>
           <div class="brand-sub">Rohit (28, 178cm) • Recomp 88.7→82.5kg • 30 Pull-Ups (Feb '28)</div>
         </div>
@@ -973,8 +1033,8 @@
     <section class="summary-grid">
       <div class="stat-card">
         <div class="stat-label">7-Day Rolling Avg</div>
-        <div class="stat-val" id="statWeight">88.0 kg</div>
-        <div class="stat-sub" id="statWeightSub">Goal: 82.5 kg (-5.5)</div>
+        <div class="stat-val" id="statWeight">87.2 kg</div>
+        <div class="stat-sub" id="statWeightSub">Start: 88.7 kg • Goal: 82.5 kg</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Today's Calories</div>
@@ -993,11 +1053,12 @@
       </div>
     </section>
 
-    <!-- Main Navigation -->
+    <!-- Main Navigation (4 Tabs including Dedicated Journey Diary) -->
     <nav class="main-tabs">
       <button class="main-tab active" data-tab="workout" onclick="switchMainTab('workout')">🏋️ PPLUL Tracker</button>
       <button class="main-tab" data-tab="nutrition" onclick="switchMainTab('nutrition')">🥗 Ideal Plan & Food</button>
       <button class="main-tab" data-tab="recomp" onclick="switchMainTab('recomp')">📊 Graphs & Recomp</button>
+      <button class="main-tab" data-tab="diary" onclick="switchMainTab('diary')">📓 Journey Diary</button>
     </nav>
 
     <!-- TAB 1: WORKOUT -->
@@ -1014,11 +1075,11 @@
         <div class="section-head">
           <div>
             <h2 class="section-title" id="dayTitle">Thursday — Upper (Strength & Pull-Up Volume)</h2>
-            <p class="section-sub" id="dayFocus">Weight increases by +2.5 kg ONLY when you hit top reps AND rate the sets "✅ Smooth"</p>
+            <p class="section-sub" id="dayFocus">Add your feel & written feedback per exercise — archiving saves everything to your Journey Diary</p>
           </div>
           <div class="btn-row">
-            <button class="btn" onclick="archiveSession()">Archive Sets</button>
-            <button class="btn btn-primary" onclick="copyDayLog()">Copy Log</button>
+            <button class="btn btn-primary" onclick="archiveSession()">✅ Finish & Save to Diary</button>
+            <button class="btn" onclick="copyDayLog()">Copy Log</button>
           </div>
         </div>
 
@@ -1034,7 +1095,6 @@
 
     <!-- TAB 2: IDEAL PLAN MATCHER, NUTRITION & SNAP FOOD -->
     <main id="tab-nutrition" class="hidden">
-      <!-- Ideal Daily Blueprint & Live Matcher -->
       <div class="card">
         <div class="section-head">
           <div>
@@ -1045,15 +1105,12 @@
 
         <div class="blueprint-box">
           <select id="blueprintSelect" class="text-input" onchange="renderIdealBlueprint()"></select>
-
           <div class="match-meters" id="blueprintMeters"></div>
-
           <div class="field-label" style="margin-top:6px;">Ideal Meal Slots (Tap "+ Log" to Match Today)</div>
           <div id="blueprintSlotsList"></div>
         </div>
       </div>
 
-      <!-- Offline Gram-Based Food Calculator -->
       <div class="card">
         <div class="section-head">
           <div>
@@ -1083,7 +1140,6 @@
           </div>
         </div>
 
-        <!-- Custom Offline Entry -->
         <div class="manual-row">
           <input id="manName" class="text-input" placeholder="Custom offline item (e.g. Sprouts 100g)" />
           <input id="manKcal" class="text-input" type="number" placeholder="kcal" />
@@ -1092,7 +1148,6 @@
         </div>
       </div>
 
-      <!-- AI Meal & Snap Food -->
       <div class="card">
         <div class="section-head">
           <div>
@@ -1138,15 +1193,13 @@
       </div>
     </main>
 
-    <!-- TAB 3: GRAPHS, RECOMP, DIARY & PULL-UPS -->
+    <!-- TAB 3: GRAPHS, RECOMP & PULL-UPS -->
     <main id="tab-recomp" class="hidden">
-      <!-- Daily & Previous Days Weigh-In + Step Counter -->
       <div class="card">
         <h2 class="section-title">Daily & Backfill Weigh-In / Step Counter</h2>
         <p class="section-sub">Log today's numbers or pick any previous date to backfill missed steps/weight</p>
 
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:10px;">
-          <!-- Weight Box -->
           <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:10px;">
             <label class="field-label" style="margin-top:0;">Morning Fasted Weight (kg)</label>
             <div style="display:flex; gap:6px; margin-bottom:6px;">
@@ -1156,7 +1209,6 @@
             <button class="btn btn-primary" style="width:100%;" onclick="logWeight()">Log Weight for Date</button>
           </div>
 
-          <!-- Steps Box with Previous Days Support -->
           <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:10px; padding:10px;">
             <div style="display:flex; justify-content:space-between; align-items:center; gap:4px; margin-bottom:6px;">
               <label class="field-label" style="margin:0;">Step Count Date</label>
@@ -1190,7 +1242,7 @@
         <div class="svg-wrap" id="chartLiftWrap"></div>
       </div>
 
-      <!-- 2x2 Analytics Grid: Weight, Calories, Protein, Steps -->
+      <!-- 2x2 Analytics Grid -->
       <div class="charts-grid">
         <div class="chart-card">
           <div class="chart-header">
@@ -1225,28 +1277,6 @@
         </div>
       </div>
 
-      <!-- Daily Transformation Diary -->
-      <div class="card">
-        <div class="section-head">
-          <div>
-            <h2 class="section-title">📓 Daily Transformation Diary (Time Capsule)</h2>
-            <p class="section-sub">Log how today went + optional Google Photos/Drive form-check video link</p>
-          </div>
-        </div>
-        <div style="display:grid; grid-template-columns: 1fr 2fr; gap:8px; margin-bottom:8px;">
-          <select id="diaryMood" class="text-input">
-            <option value="🔥 High Energy / Locked In">🔥 High Energy / Locked In</option>
-            <option value="✅ Steady / Normal Day">✅ Steady / Normal Day</option>
-            <option value="😴 Low Sleep / Tired">😴 Low Sleep / Tired</option>
-            <option value="💼 Busy Office / Travel">💼 Busy Office / Travel</option>
-          </select>
-          <input id="diaryVideoLink" class="text-input" placeholder="Optional Google Photos / Drive form-check video URL" />
-        </div>
-        <textarea id="diaryNote" class="textarea" style="min-height:58px;" placeholder="How did training, hunger, and recovery feel today?"></textarea>
-        <button class="btn btn-primary" onclick="saveDiaryEntry()">Save Today's Diary Entry</button>
-        <div id="diaryList" style="margin-top:12px;"></div>
-      </div>
-
       <!-- 4-Stage Pull-Up Roadmap -->
       <div class="card">
         <h2 class="section-title">4-Stage Pull-Up Roadmap (Target: 30 Strict by Feb 28, 2028)</h2>
@@ -1265,6 +1295,36 @@
         </div>
         <div id="coachOutput" style="white-space:pre-wrap; font-size:13px; color:var(--text); background:var(--surface-2); padding:12px; border-radius:10px; border:1px solid var(--border);">Tap "Run Weekly Audit" after saving your Google AI Studio API key in Settings & Sync.</div>
       </div>
+    </main>
+
+    <!-- TAB 4: DEDICATED DIGITAL TRANSFORMATION DIARY -->
+    <main id="tab-diary" class="hidden">
+      <div class="card">
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">📓 Digital Transformation Diary (Day 1 → Goal 82.5 kg)</h2>
+            <p class="section-sub">Every weigh-in, workout, exercise feedback note, meal log & daily reflection woven into your story</p>
+          </div>
+          <button class="btn" onclick="copyFullStory()">📋 Copy Full Story</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr 2fr; gap:8px; margin-bottom:8px;">
+          <input id="diaryDateInput" class="text-input" type="date" />
+          <select id="diaryMood" class="text-input">
+            <option value="🔥 Smooth & Locked In">🔥 Smooth & Locked In</option>
+            <option value="✅ Steady / Normal Day">✅ Steady / Normal Day</option>
+            <option value="⚡ Hard Push / Sore">⚡ Hard Push / Sore</option>
+            <option value="😴 Low Sleep / Office Day">😴 Low Sleep / Office Day</option>
+          </select>
+          <input id="diaryVideoLink" class="text-input" placeholder="Optional Google Photos / Drive form-check video URL" />
+        </div>
+
+        <textarea id="diaryNote" class="textarea" style="min-height:64px;" placeholder="Write today's story (e.g., Day 12 — Hit 87.2 kg fasted! Bench press felt super smooth at 20kg, kept protein above 185g)..."></textarea>
+        <button class="btn btn-primary" onclick="saveDiaryEntry()">+ Add Reflection to Diary</button>
+      </div>
+
+      <!-- Unified Chronological Story Timeline -->
+      <div id="journeyTimeline"></div>
     </main>
   </div>
 
@@ -1329,7 +1389,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = 'progressive_lift_os_v7';
+    const STORAGE_KEY = 'progressive_lift_os_v8';
     const CLOUD_CFG_KEY = 'progressive_lift_cloud_cfg_v1';
 
     const IDEAL_BLUEPRINTS = [
@@ -1403,7 +1463,7 @@
     const PROGRAM = {
       mon: {
         title: 'Monday — Push (Chest, Shoulders, Triceps)',
-        focus: 'Weight increases by +2.5 kg ONLY when you hit top reps AND rate the sets "✅ Smooth"',
+        focus: 'Rate feel + write quick exercise feedback • Tap "✅ Finish & Save to Diary" after your session',
         warmups: [
           { id: 'mon_w1', text: 'Band/Cable External Rotations (2×15)' },
           { id: 'mon_w2', text: 'Scapular Wall Slides & Arm Circles (2 mins)' },
@@ -1418,9 +1478,7 @@
         ],
         slots: [
           {
-            slotId: 'mon_ex1',
-            pattern: 'Horizontal Chest Press',
-            minReps: 8, maxReps: 12, rest: '150s',
+            slotId: 'mon_ex1', pattern: 'Horizontal Chest Press', minReps: 8, maxReps: 12, rest: '150s',
             note: 'Track plate weight per side (or per hand for DB)',
             options: [
               { id: 'mon_ex1', name: 'Flat Barbell Bench Press (Per Side)', defaultWt: 20 },
@@ -1429,9 +1487,7 @@
             ]
           },
           {
-            slotId: 'mon_ex2',
-            pattern: 'Vertical Overhead Press',
-            minReps: 8, maxReps: 12, rest: '150s',
+            slotId: 'mon_ex2', pattern: 'Vertical Overhead Press', minReps: 8, maxReps: 12, rest: '150s',
             note: 'Keep ribs down, full overhead lockout',
             options: [
               { id: 'mon_ex2', name: 'Seated DB Shoulder Press (Per Hand)', defaultWt: 15 },
@@ -1440,9 +1496,7 @@
             ]
           },
           {
-            slotId: 'mon_ex3',
-            pattern: 'Upper Chest Incline',
-            minReps: 10, maxReps: 15, rest: '120s',
+            slotId: 'mon_ex3', pattern: 'Upper Chest Incline', minReps: 10, maxReps: 15, rest: '120s',
             note: '2-sec controlled lowering',
             options: [
               { id: 'mon_ex3', name: 'Incline DB Press 30° (Per Hand)', defaultWt: 20 },
@@ -1451,9 +1505,7 @@
             ]
           },
           {
-            slotId: 'mon_ex4',
-            pattern: 'Side Delt Isolation',
-            minReps: 12, maxReps: 15, rest: '90s',
+            slotId: 'mon_ex4', pattern: 'Side Delt Isolation', minReps: 12, maxReps: 15, rest: '90s',
             note: 'Lead with elbows, no momentum',
             options: [
               { id: 'mon_ex4', name: 'DB Lateral Raises (Per Hand)', defaultWt: 7.5 },
@@ -1462,9 +1514,7 @@
             ]
           },
           {
-            slotId: 'mon_ex5',
-            pattern: 'Tricep Lateral Head',
-            minReps: 12, maxReps: 15, rest: '90s',
+            slotId: 'mon_ex5', pattern: 'Tricep Lateral Head', minReps: 12, maxReps: 15, rest: '90s',
             note: 'Lock elbows tight at sides',
             options: [
               { id: 'mon_ex5', name: 'Cable Tricep Pushdowns (Straight/V-Bar)', defaultWt: 30 },
@@ -1473,9 +1523,7 @@
             ]
           },
           {
-            slotId: 'mon_ex6',
-            pattern: 'Tricep Long Head Stretch',
-            minReps: 12, maxReps: 15, rest: '90s',
+            slotId: 'mon_ex6', pattern: 'Tricep Long Head Stretch', minReps: 12, maxReps: 15, rest: '90s',
             note: 'Full stretch behind head',
             options: [
               { id: 'mon_ex6', name: 'Overhead Cable Tricep Extension', defaultWt: 37.5 },
@@ -1487,7 +1535,7 @@
       },
       tue: {
         title: 'Tuesday — Pull (Back, Rear Delts, Biceps)',
-        focus: 'Weight increases ONLY when you hit top reps AND rate the sets "✅ Smooth"',
+        focus: 'Rate feel + write quick exercise feedback • Tap "✅ Finish & Save to Diary" after your session',
         warmups: [
           { id: 'tue_w1', text: 'Dead Hang Scapular Pulls (2×10)' },
           { id: 'tue_w2', text: 'Band Pull-Aparts (2×15)' },
@@ -1499,9 +1547,7 @@
         ],
         slots: [
           {
-            slotId: 'tue_ex1',
-            pattern: 'Primary Vertical Pull (Pull-Up Goal)',
-            minReps: 8, maxReps: 10, rest: '150s',
+            slotId: 'tue_ex1', pattern: 'Primary Vertical Pull (Pull-Up Goal)', minReps: 8, maxReps: 10, rest: '150s',
             note: 'Lower counterweight by 2.5-5kg at 3×10 Smooth',
             options: [
               { id: 'tue_ex1', name: 'Counterweight Assisted Pull-Ups (Overhand)', defaultWt: 45 },
@@ -1510,9 +1556,7 @@
             ]
           },
           {
-            slotId: 'tue_ex2',
-            pattern: 'Supported Horizontal Row',
-            minReps: 8, maxReps: 12, rest: '120s',
+            slotId: 'tue_ex2', pattern: 'Supported Horizontal Row', minReps: 8, maxReps: 12, rest: '120s',
             note: 'Pause 1s at peak contraction',
             options: [
               { id: 'tue_ex2', name: 'Chest-Supported DB Row (Per Hand)', defaultWt: 15 },
@@ -1521,9 +1565,7 @@
             ]
           },
           {
-            slotId: 'tue_ex3',
-            pattern: 'Secondary Lat Pulldown',
-            minReps: 10, maxReps: 12, rest: '120s',
+            slotId: 'tue_ex3', pattern: 'Secondary Lat Pulldown', minReps: 10, maxReps: 12, rest: '120s',
             note: 'Drive elbows down to hips',
             options: [
               { id: 'tue_ex3', name: 'Lat Pulldown (Wide Grip)', defaultWt: 35 },
@@ -1532,9 +1574,7 @@
             ]
           },
           {
-            slotId: 'tue_ex4',
-            pattern: 'Mid-Back Cable Row',
-            minReps: 10, maxReps: 12, rest: '120s',
+            slotId: 'tue_ex4', pattern: 'Mid-Back Cable Row', minReps: 10, maxReps: 12, rest: '120s',
             note: 'No lower-back momentum',
             options: [
               { id: 'tue_ex4', name: 'Seated Cable Row (Close Grip)', defaultWt: 35 },
@@ -1543,9 +1583,7 @@
             ]
           },
           {
-            slotId: 'tue_ex5',
-            pattern: 'Rear Delt & Scapular Health',
-            minReps: 12, maxReps: 15, rest: '90s',
+            slotId: 'tue_ex5', pattern: 'Rear Delt & Scapular Health', minReps: 12, maxReps: 15, rest: '90s',
             note: 'High-rep upper back stability',
             options: [
               { id: 'tue_ex5', name: 'Rear Delt Cable / DB Flyes', defaultWt: 20 },
@@ -1554,9 +1592,7 @@
             ]
           },
           {
-            slotId: 'tue_ex6',
-            pattern: 'Bicep Flexion',
-            minReps: 10, maxReps: 15, rest: '90s',
+            slotId: 'tue_ex6', pattern: 'Bicep Flexion', minReps: 10, maxReps: 15, rest: '90s',
             note: 'Full stretch at bottom',
             options: [
               { id: 'tue_ex6', name: 'Incline DB Bicep Curls (Per Hand)', defaultWt: 7.5 },
@@ -1568,7 +1604,7 @@
       },
       wed: {
         title: 'Wednesday — Legs & Core (Quads, Hamstrings, Calves)',
-        focus: 'Weight increases ONLY when you hit top reps AND rate the sets "✅ Smooth"',
+        focus: 'Rate feel + write quick exercise feedback • Tap "✅ Finish & Save to Diary" after your session',
         warmups: [
           { id: 'wed_w1', text: '90/90 Hip Switches & Pelvic Tilts (2 mins)' },
           { id: 'wed_w2', text: 'Bodyweight Deep Squat Hold (2×20s)' },
@@ -1580,9 +1616,7 @@
         ],
         slots: [
           {
-            slotId: 'wed_ex1',
-            pattern: 'Primary Squat Pattern',
-            minReps: 6, maxReps: 10, rest: '180s',
+            slotId: 'wed_ex1', pattern: 'Primary Squat Pattern', minReps: 6, maxReps: 10, rest: '180s',
             note: 'Brace core, 3-sec controlled descent',
             options: [
               { id: 'wed_ex1', name: 'Barbell Back Squat (Per Side)', defaultWt: 20 },
@@ -1591,9 +1625,7 @@
             ]
           },
           {
-            slotId: 'wed_ex2',
-            pattern: 'Quad Compound Press',
-            minReps: 10, maxReps: 15, rest: '150s',
+            slotId: 'wed_ex2', pattern: 'Quad Compound Press', minReps: 10, maxReps: 15, rest: '150s',
             note: 'Full knee flexion without pelvic tuck',
             options: [
               { id: 'wed_ex2', name: '45° Leg Press (Total Plates)', defaultWt: 60 },
@@ -1602,9 +1634,7 @@
             ]
           },
           {
-            slotId: 'wed_ex3',
-            pattern: 'Hip Hinge / Hamstring Stretch',
-            minReps: 8, maxReps: 12, rest: '150s',
+            slotId: 'wed_ex3', pattern: 'Hip Hinge / Hamstring Stretch', minReps: 8, maxReps: 12, rest: '150s',
             note: 'Push hips back until deep hamstring stretch',
             options: [
               { id: 'wed_ex3', name: 'Romanian Deadlift DB/BB (Per Side)', defaultWt: 22.5 },
@@ -1613,9 +1643,7 @@
             ]
           },
           {
-            slotId: 'wed_ex4',
-            pattern: 'Knee Flexion Hamstring',
-            minReps: 10, maxReps: 15, rest: '90s',
+            slotId: 'wed_ex4', pattern: 'Knee Flexion Hamstring', minReps: 10, maxReps: 15, rest: '90s',
             note: 'Control the eccentric return',
             options: [
               { id: 'wed_ex4', name: 'Seated / Lying Leg Curl Machine', defaultWt: 50 },
@@ -1623,9 +1651,7 @@
             ]
           },
           {
-            slotId: 'wed_ex5',
-            pattern: 'Calf Raise (Standing / Seated)',
-            minReps: 12, maxReps: 22, rest: '90s',
+            slotId: 'wed_ex5', pattern: 'Calf Raise (Standing / Seated)', minReps: 12, maxReps: 22, rest: '90s',
             note: '2-sec pause at bottom stretch',
             options: [
               { id: 'wed_ex5', name: 'Standing Calf Raises', defaultWt: 35 },
@@ -1637,7 +1663,7 @@
       },
       thu: {
         title: 'Thursday — Upper (Strength & Pull-Up Volume)',
-        focus: 'Second weekly overhead press + pull-up progression + optional Arm Superset',
+        focus: 'Rate feel + write quick exercise feedback • Tap "✅ Finish & Save to Diary" after your session',
         warmups: [
           { id: 'thu_w1', text: 'Cable External Rotations (2×15)' },
           { id: 'thu_w2', text: 'Scapular Pull-Ups (2×8)' }
@@ -1648,9 +1674,7 @@
         ],
         slots: [
           {
-            slotId: 'thu_ex1',
-            pattern: 'Upper Chest Press',
-            minReps: 8, maxReps: 12, rest: '150s',
+            slotId: 'thu_ex1', pattern: 'Upper Chest Press', minReps: 8, maxReps: 12, rest: '150s',
             note: 'Controlled 2-sec negative',
             options: [
               { id: 'thu_ex1', name: 'Incline DB Bench Press (Per Hand)', defaultWt: 20 },
@@ -1659,9 +1683,7 @@
             ]
           },
           {
-            slotId: 'thu_ex2',
-            pattern: 'Second Weekly Pull-Up Slot',
-            minReps: 8, maxReps: 10, rest: '150s',
+            slotId: 'thu_ex2', pattern: 'Second Weekly Pull-Up Slot', minReps: 8, maxReps: 10, rest: '150s',
             note: 'Strict chin over bar, 1s pause',
             options: [
               { id: 'thu_ex2', name: 'Counterweight Assisted Pull-Ups', defaultWt: 45 },
@@ -1670,9 +1692,7 @@
             ]
           },
           {
-            slotId: 'thu_ex3',
-            pattern: 'Upper Back Horizontal Row',
-            minReps: 8, maxReps: 12, rest: '120s',
+            slotId: 'thu_ex3', pattern: 'Upper Back Horizontal Row', minReps: 8, maxReps: 12, rest: '120s',
             note: 'Flat back, pull to lower ribs',
             options: [
               { id: 'thu_ex3', name: 'Bent-Over Barbell / DB Row', defaultWt: 15 },
@@ -1681,9 +1701,7 @@
             ]
           },
           {
-            slotId: 'thu_ex4',
-            pattern: 'Second Weekly Shoulder Press',
-            minReps: 8, maxReps: 12, rest: '120s',
+            slotId: 'thu_ex4', pattern: 'Second Weekly Shoulder Press', minReps: 8, maxReps: 12, rest: '120s',
             note: 'Strict vertical press without arching lower back',
             options: [
               { id: 'thu_ex4', name: 'Seated DB Shoulder Press (Per Hand)', defaultWt: 15 },
@@ -1692,9 +1710,7 @@
             ]
           },
           {
-            slotId: 'thu_ex5',
-            pattern: 'Rotator Cuff & Arms Finisher',
-            minReps: 12, maxReps: 15, rest: '90s',
+            slotId: 'thu_ex5', pattern: 'Rotator Cuff & Arms Finisher', minReps: 12, maxReps: 15, rest: '90s',
             note: 'Swap to Bicep+Tricep Superset if prioritizing arms',
             options: [
               { id: 'thu_ex5', name: 'Cable Face Pulls + Rope Pushdown', defaultWt: 25 },
@@ -1706,7 +1722,7 @@
       },
       fri: {
         title: 'Friday — Lower (Posterior Chain, Unilateral & Core)',
-        focus: 'Hamstring/glute hypertrophy + single-leg stability before weekend rest',
+        focus: 'Rate feel + write quick exercise feedback • Tap "✅ Finish & Save to Diary" after your session',
         warmups: [
           { id: 'fri_w1', text: 'Pelvic Tilts & Hip Circles (2 mins)' },
           { id: 'fri_w2', text: 'Bodyweight Walking Lunges (2×10/leg)' }
@@ -1717,9 +1733,7 @@
         ],
         slots: [
           {
-            slotId: 'fri_ex1',
-            pattern: 'Primary Posterior Hinge',
-            minReps: 8, maxReps: 10, rest: '150s',
+            slotId: 'fri_ex1', pattern: 'Primary Posterior Hinge', minReps: 8, maxReps: 10, rest: '150s',
             note: 'Keep bar/DBs close to shins',
             options: [
               { id: 'fri_ex1', name: 'Barbell RDL / Trap Bar (Per Side)', defaultWt: 30 },
@@ -1728,9 +1742,7 @@
             ]
           },
           {
-            slotId: 'fri_ex2',
-            pattern: 'Secondary Squat / Quad',
-            minReps: 8, maxReps: 12, rest: '150s',
+            slotId: 'fri_ex2', pattern: 'Secondary Squat / Quad', minReps: 8, maxReps: 12, rest: '150s',
             note: 'Upright torso quad focus',
             options: [
               { id: 'fri_ex2', name: 'Hack Squat / Front Squat (Per Side)', defaultWt: 25 },
@@ -1739,9 +1751,7 @@
             ]
           },
           {
-            slotId: 'fri_ex3',
-            pattern: 'Unilateral Single-Leg',
-            minReps: 10, maxReps: 12, rest: '120s',
+            slotId: 'fri_ex3', pattern: 'Unilateral Single-Leg', minReps: 10, maxReps: 12, rest: '120s',
             note: 'Reps per leg',
             options: [
               { id: 'fri_ex3', name: 'Bulgarian Split Squat / Walking Lunge', defaultWt: 36 },
@@ -1750,9 +1760,7 @@
             ]
           },
           {
-            slotId: 'fri_ex4',
-            pattern: 'Lower Ab / Pelvic Control',
-            minReps: 10, maxReps: 15, rest: '90s',
+            slotId: 'fri_ex4', pattern: 'Lower Ab / Pelvic Control', minReps: 10, maxReps: 15, rest: '90s',
             note: 'Curl pelvis up, no swinging',
             options: [
               { id: 'fri_ex4', name: 'Hanging Knee / Leg Raises', defaultWt: 5 },
@@ -1761,9 +1769,7 @@
             ]
           },
           {
-            slotId: 'fri_ex5',
-            pattern: 'Soleus / Seated Calf',
-            minReps: 12, maxReps: 15, rest: '90s',
+            slotId: 'fri_ex5', pattern: 'Soleus / Seated Calf', minReps: 12, maxReps: 15, rest: '90s',
             note: 'Full range of motion',
             options: [
               { id: 'fri_ex5', name: 'Seated Calf Raises', defaultWt: 60 },
@@ -1781,7 +1787,6 @@
       { id: 4, title: 'Stage 4: Strict Unassisted', desc: '1–3 → 8 → 15 → 30 strict pull-ups (Feb 28, 2028 target)' }
     ];
 
-    /* Pre-seeded with your complete Nov 26, 2026 JSON backup */
     const SEED_STATE = {
       updatedAt: 1795680000000,
       apiKey: '',
@@ -1822,7 +1827,25 @@
           { id: 1795678030798, name: 'Rice, roti, aloo gobi sabzi, dal/kadhi, cucumber, and onion', kcal: 590, protein: 14, carbs: 95, fat: 17 }
         ]
       },
-      diaryLog: [],
+      diaryLog: [
+        {
+          id: 1794600000001,
+          date: '2026-11-14',
+          label: 'Nov 14',
+          mood: '🔥 Smooth & Locked In',
+          note: 'Day 1 baseline logged at 88.7 kg. Starting Phase 1 recomp toward 82.5 kg and 30 strict pull-ups.',
+          videoUrl: ''
+        },
+        {
+          id: 1795679000002,
+          date: '2026-11-26',
+          label: 'Nov 26',
+          mood: '🔥 Smooth & Locked In',
+          note: 'Down to 87.2 kg (-1.5 kg from start)! Completed Mon–Thu sessions cleanly and hit 13,215 steps yesterday.',
+          videoUrl: ''
+        }
+      ],
+      workoutArchiveLog: [],
       selectedOptionBySlot: {
         wed_ex5: 'wed_custom_1795579816694'
       },
@@ -1835,34 +1858,34 @@
         thu_w1: true, thu_w2: true, thu_c1: true, thu_c2: true
       },
       lifts: {
-        mon_ex1: { weight: 20, reps: ['12', '10', '8'], feel: 'smooth', history: [] },
-        mon_ex2: { weight: 15, reps: ['12', '11', '8'], feel: 'smooth', history: [] },
-        mon_ex3: { weight: 20, reps: ['20', '15', '15'], feel: 'smooth', history: [] },
-        mon_ex4: { weight: 7.5, reps: ['15', '12', '10'], feel: 'smooth', history: [] },
-        mon_ex5: { weight: 30, reps: ['20', '15', '12'], feel: 'smooth', history: [] },
-        mon_ex6: { weight: 37.5, reps: ['15', '15', '15'], feel: 'smooth', history: [] },
-        tue_ex1: { weight: 45, reps: ['5', '10', '8'], feel: 'smooth', history: [] },
-        tue_ex2: { weight: 15, reps: ['15', '15', '15'], feel: 'smooth', history: [] },
-        tue_ex3: { weight: 35, reps: ['12', '10', '12'], feel: 'smooth', history: [] },
-        tue_ex4: { weight: 35, reps: ['12', '12', '12'], feel: 'smooth', history: [] },
-        tue_ex5: { weight: 20, reps: ['20', '20', '15'], feel: 'smooth', history: [] },
-        tue_ex6: { weight: 7.5, reps: ['15', '15', '15'], feel: 'smooth', history: [] },
-        wed_ex1: { weight: 20, reps: ['12', '12', '12'], feel: 'smooth', history: [] },
-        wed_ex2: { weight: 60, reps: ['20', '12', '12'], feel: 'smooth', history: [] },
-        wed_ex3: { weight: 22.5, reps: ['15', '15', '15'], feel: 'smooth', history: [] },
-        wed_ex4: { weight: 50, reps: ['15', '15', '15'], feel: 'smooth', history: [] },
-        wed_ex5: { weight: 35, reps: ['', '', ''], feel: 'smooth', history: [] },
-        wed_custom_1795579816694: { weight: 35, reps: ['30', '20', '20'], feel: 'smooth', history: [] },
-        thu_ex1: { weight: 20, reps: ['12', '12', '12'], feel: 'smooth', history: [] },
-        thu_ex2: { weight: 45, reps: ['12', '10', '8'], feel: 'smooth', history: [] },
-        thu_ex3: { weight: 15, reps: ['12', '12', '12'], feel: 'smooth', history: [] },
-        thu_ex4: { weight: 15, reps: ['12', '12', '12'], feel: 'smooth', history: [] },
-        thu_ex5: { weight: 25, reps: ['12', '12', '12'], feel: 'smooth', history: [] },
-        fri_ex1: { weight: 30, reps: ['', '', ''], feel: 'smooth', history: [] },
-        fri_ex2: { weight: 25, reps: ['', '', ''], feel: 'smooth', history: [] },
-        fri_ex3: { weight: 36, reps: ['', '', ''], feel: 'smooth', history: [] },
-        fri_ex4: { weight: 5, reps: ['', '', ''], feel: 'smooth', history: [] },
-        fri_ex5: { weight: 60, reps: ['', '', ''], feel: 'smooth', history: [] }
+        mon_ex1: { weight: 20, reps: ['12', '10', '8'], feel: 'smooth', note: '', history: [] },
+        mon_ex2: { weight: 15, reps: ['12', '11', '8'], feel: 'smooth', note: '', history: [] },
+        mon_ex3: { weight: 20, reps: ['20', '15', '15'], feel: 'smooth', note: '', history: [] },
+        mon_ex4: { weight: 7.5, reps: ['15', '12', '10'], feel: 'smooth', note: '', history: [] },
+        mon_ex5: { weight: 30, reps: ['20', '15', '12'], feel: 'smooth', note: '', history: [] },
+        mon_ex6: { weight: 37.5, reps: ['15', '15', '15'], feel: 'smooth', note: '', history: [] },
+        tue_ex1: { weight: 45, reps: ['5', '10', '8'], feel: 'smooth', note: '', history: [] },
+        tue_ex2: { weight: 15, reps: ['15', '15', '15'], feel: 'smooth', note: '', history: [] },
+        tue_ex3: { weight: 35, reps: ['12', '10', '12'], feel: 'smooth', note: '', history: [] },
+        tue_ex4: { weight: 35, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
+        tue_ex5: { weight: 20, reps: ['20', '20', '15'], feel: 'smooth', note: '', history: [] },
+        tue_ex6: { weight: 7.5, reps: ['15', '15', '15'], feel: 'smooth', note: '', history: [] },
+        wed_ex1: { weight: 20, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
+        wed_ex2: { weight: 60, reps: ['20', '12', '12'], feel: 'smooth', note: '', history: [] },
+        wed_ex3: { weight: 22.5, reps: ['15', '15', '15'], feel: 'smooth', note: '', history: [] },
+        wed_ex4: { weight: 50, reps: ['15', '15', '15'], feel: 'smooth', note: '', history: [] },
+        wed_ex5: { weight: 35, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
+        wed_custom_1795579816694: { weight: 35, reps: ['30', '20', '20'], feel: 'smooth', note: '', history: [] },
+        thu_ex1: { weight: 20, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
+        thu_ex2: { weight: 45, reps: ['12', '10', '8'], feel: 'smooth', note: '', history: [] },
+        thu_ex3: { weight: 15, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
+        thu_ex4: { weight: 15, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
+        thu_ex5: { weight: 25, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
+        fri_ex1: { weight: 30, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
+        fri_ex2: { weight: 25, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
+        fri_ex3: { weight: 36, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
+        fri_ex4: { weight: 5, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
+        fri_ex5: { weight: 60, reps: ['', '', ''], feel: 'smooth', note: '', history: [] }
       }
     };
 
@@ -1918,6 +1941,12 @@
       });
       const mergedDiary = Object.values(mergedDiaryMap).sort((a, b) => b.id - a.id);
 
+      const mergedArchiveMap = {};
+      [...(base.workoutArchiveLog || []), ...(incoming.workoutArchiveLog || [])].forEach(a => {
+        if (a && a.id) mergedArchiveMap[a.id] = a;
+      });
+      const mergedArchive = Object.values(mergedArchiveMap).sort((a, b) => b.id - a.id);
+
       return {
         ...base,
         ...incoming,
@@ -1927,6 +1956,7 @@
         stepsByDate: { ...(base.stepsByDate || {}), ...(incoming.stepsByDate || {}) },
         mealsByDate: mergedMeals,
         diaryLog: mergedDiary,
+        workoutArchiveLog: mergedArchive,
         selectedOptionBySlot: { ...(base.selectedOptionBySlot || {}), ...(incoming.selectedOptionBySlot || {}) },
         customOptionsBySlot: { ...(base.customOptionsBySlot || {}), ...(incoming.customOptionsBySlot || {}) },
         checks: { ...(base.checks || {}), ...(incoming.checks || {}) },
@@ -1937,6 +1967,7 @@
     function loadState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY)
+          || localStorage.getItem('progressive_lift_os_v7')
           || localStorage.getItem('progressive_lift_os_v6')
           || localStorage.getItem('progressive_lift_os_v5')
           || localStorage.getItem('progressive_lift_os_v4')
@@ -1988,7 +2019,6 @@
       if (!cfg.gistId || !cfg.gistToken) return;
       try {
         setCloudPill('☁️ SYNCING...', true);
-        const payload = { ...state };
         const res = await fetch(`https://api.github.com/gists/${encodeURIComponent(cfg.gistId.trim())}`, {
           method: 'PATCH',
           headers: {
@@ -1999,7 +2029,7 @@
           body: JSON.stringify({
             files: {
               'progressive_lift_sync.json': {
-                content: JSON.stringify(payload, null, 2)
+                content: JSON.stringify(state, null, 2)
               }
             }
           })
@@ -2045,6 +2075,7 @@
             renderIdealBlueprint();
             renderMeals();
             renderRecomp();
+            renderJourneyTimeline();
           }
         }
         await pushToGist();
@@ -2053,6 +2084,24 @@
         setCloudPill('☁️ SYNC ERR', false);
         if (diag) diag.textContent = `Sync error: ${e.message}`;
       }
+    }
+
+    /* FIXED 7-DAY CALENDAR ROLLING AVERAGE */
+    function computeRolling7DayWeight() {
+      const sorted = [...state.weightsLog].sort((a, b) => a.date.localeCompare(b.date));
+      if (!sorted.length) return { avg: 87.2, latest: 87.2, start: 88.7 };
+      const latestEntry = sorted[sorted.length - 1];
+      const startEntry = sorted[0];
+
+      const latestMs = new Date(latestEntry.date + 'T00:00:00').getTime();
+      const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+      const last7Calendar = sorted.filter(w => {
+        const ms = new Date(w.date + 'T00:00:00').getTime();
+        return (latestMs - ms) >= 0 && (latestMs - ms) < sevenDaysMs;
+      });
+      const pool = last7Calendar.length ? last7Calendar : [latestEntry];
+      const avg = (pool.reduce((s, w) => s + Number(w.kg), 0) / pool.length).toFixed(1);
+      return { avg: Number(avg), latest: Number(latestEntry.kg), start: Number(startEntry.kg) };
     }
 
     function updateSummaryBar() {
@@ -2065,13 +2114,10 @@
         pill.classList.remove('ready');
       }
 
-      const recent = state.weightsLog.slice(-7);
-      const avg = recent.length
-        ? (recent.reduce((s, w) => s + Number(w.kg), 0) / recent.length).toFixed(1)
-        : '87.2';
-      const diff = (Number(avg) - Number(state.targets.goalWeight)).toFixed(1);
-      document.getElementById('statWeight').textContent = `${avg} kg`;
-      document.getElementById('statWeightSub').textContent = `Goal: ${state.targets.goalWeight} kg (${diff > 0 ? '-' + diff : '+' + Math.abs(diff)})`;
+      const wStats = computeRolling7DayWeight();
+      const lostSoFar = Math.round((wStats.start - wStats.latest) * 10) / 10;
+      document.getElementById('statWeight').textContent = `${wStats.avg.toFixed(1)} kg`;
+      document.getElementById('statWeightSub').textContent = `Start: ${wStats.start} kg (${lostSoFar >= 0 ? '-' + lostSoFar : '+' + Math.abs(lostSoFar)}) • Goal: ${state.targets.goalWeight}`;
 
       const meals = state.mealsByDate[todayKey()] || [];
       const totKcal = Math.round(meals.reduce((s, m) => s + Number(m.kcal || 0), 0));
@@ -2094,11 +2140,17 @@
       document.getElementById('tab-workout').classList.toggle('hidden', tab !== 'workout');
       document.getElementById('tab-nutrition').classList.toggle('hidden', tab !== 'nutrition');
       document.getElementById('tab-recomp').classList.toggle('hidden', tab !== 'recomp');
+      document.getElementById('tab-diary').classList.toggle('hidden', tab !== 'diary');
       if (tab === 'nutrition') {
         renderIdealBlueprint();
         renderMeals();
       }
       if (tab === 'recomp') renderRecomp();
+      if (tab === 'diary') {
+        const dInp = document.getElementById('diaryDateInput');
+        if (dInp && !dInp.value) dInp.value = todayKey();
+        renderJourneyTimeline();
+      }
       saveState();
     }
 
@@ -2159,7 +2211,7 @@
         const isSwapped = activeOpt.id !== slot.slotId;
 
         if (!state.lifts[activeOpt.id]) {
-          state.lifts[activeOpt.id] = { weight: activeOpt.defaultWt ?? 10, reps: ['', '', ''], feel: 'smooth', history: [] };
+          state.lifts[activeOpt.id] = { weight: activeOpt.defaultWt ?? 10, reps: ['', '', ''], feel: 'smooth', note: '', history: [] };
         }
         const lift = state.lifts[activeOpt.id];
         if (!lift.feel) lift.feel = 'smooth';
@@ -2255,9 +2307,22 @@
               <button type="button" class="fb-btn ${lift.feel === 'hard' ? 'active-hard' : ''}" onclick="setLiftFeel('${slot.slotId}', '${activeOpt.id}', 'hard')">⚡ Hard (0–1 RIR)</button>
               <button type="button" class="fb-btn ${lift.feel === 'grind' ? 'active-grind' : ''}" onclick="setLiftFeel('${slot.slotId}', '${activeOpt.id}', 'grind')">⚠️ Grind / Tight</button>
             </div>
+
+            <input
+              class="fb-note-input"
+              type="text"
+              value="${(lift.note || '').replace(/"/g, '&quot;')}"
+              placeholder="Write exercise feedback (e.g. 'Very smooth, ready for +2.5kg next week' or 'Left shoulder tight')..."
+              oninput="updateLiftNote('${activeOpt.id}', this.value)"
+            />
           </div>
         `;
       }).join('');
+    }
+
+    function updateLiftNote(exId, val) {
+      state.lifts[exId].note = val;
+      saveState();
     }
 
     function setLiftFeel(slotId, exId, feel) {
@@ -2310,7 +2375,7 @@
         isCustom: true
       });
       state.selectedOptionBySlot[slotId] = customId;
-      state.lifts[customId] = { weight: isNaN(wt) ? 10 : wt, reps: ['', '', ''], feel: 'smooth', history: [] };
+      state.lifts[customId] = { weight: isNaN(wt) ? 10 : wt, reps: ['', '', ''], feel: 'smooth', note: '', history: [] };
       openDrawerSlotId = null;
       saveState();
       renderWorkoutDay();
@@ -2390,16 +2455,35 @@
       saveState();
     }
 
+    /* ARCHIVE SESSION DIRECTLY INTO JOURNEY DIARY + PROGRESSION HISTORY */
     function archiveSession() {
       const day = state.activeDay;
       let bumped = 0;
       let held = 0;
+      const loggedExercises = [];
+
       PROGRAM[day].slots.forEach(slot => {
         const activeOpt = getActiveOption(slot);
         const lift = state.lifts[activeOpt.id];
         if (lift && lift.reps.some(r => r !== '')) {
           const status = getProgressionStatus(slot, lift);
-          lift.history.push({ date: todayKey(), weight: lift.weight, reps: [...lift.reps], feel: lift.feel || 'smooth' });
+          const repsStr = lift.reps.filter(r => r !== '').join('/');
+          const feelLabel = lift.feel === 'smooth' ? 'Smooth' : (lift.feel === 'hard' ? 'Hard' : 'Grind');
+          loggedExercises.push({
+            name: activeOpt.name,
+            weight: lift.weight,
+            reps: repsStr,
+            feel: feelLabel,
+            note: lift.note || '',
+            progressed: status === 'ready'
+          });
+          lift.history.push({
+            date: todayKey(),
+            weight: lift.weight,
+            reps: [...lift.reps],
+            feel: lift.feel || 'smooth',
+            note: lift.note || ''
+          });
           if (status === 'ready') {
             lift.weight = Math.round((Number(lift.weight) + 2.5) * 10) / 10;
             bumped++;
@@ -2407,11 +2491,23 @@
             held++;
           }
           lift.reps = lift.reps.map(() => '');
+          lift.note = '';
         }
       });
+
+      if (loggedExercises.length > 0) {
+        if (!state.workoutArchiveLog) state.workoutArchiveLog = [];
+        state.workoutArchiveLog.unshift({
+          id: Date.now(),
+          date: todayKey(),
+          dayTitle: PROGRAM[day].title,
+          exercises: loggedExercises
+        });
+      }
+
       saveState();
       renderWorkoutDay();
-      alert(`Session archived!\n• ${bumped} lift(s) progressed by +2.5 kg (Smooth top reps)\n• ${held} lift(s) held at current weight until reps feel smooth.`);
+      alert(`Saved to your Journey Diary!\n• ${loggedExercises.length} exercise(s) recorded with your feedback\n• ${bumped} lift(s) progressed by +2.5 kg\n• ${held} lift(s) held steady.`);
     }
 
     function copyDayLog() {
@@ -2421,7 +2517,10 @@
         const activeOpt = getActiveOption(slot);
         const lift = state.lifts[activeOpt.id];
         const repsStr = lift.reps.filter(r => r !== '').join('/');
-        if (repsStr) lines.push(`• ${activeOpt.name}: ${lift.weight} kg × ${repsStr} [${lift.feel || 'smooth'}]`);
+        if (repsStr) {
+          const notePart = lift.note ? ` — "${lift.note}"` : '';
+          lines.push(`• ${activeOpt.name}: ${lift.weight} kg × ${repsStr} [${lift.feel || 'smooth'}]${notePart}`);
+        }
       });
       navigator.clipboard?.writeText(lines.join('\n'));
       alert('Workout summary copied to clipboard!');
@@ -2892,7 +2991,9 @@
       const today = todayKey();
       const wDate = document.getElementById('weightDateInput');
       const sDate = document.getElementById('stepsDateInput');
+      const dDate = document.getElementById('diaryDateInput');
       if (wDate && !wDate.value) wDate.value = today;
+      if (dDate && !dDate.value) dDate.value = today;
       if (sDate && !sDate.value) {
         sDate.value = today;
         onStepsDateChange();
@@ -2957,16 +3058,17 @@
       `).join('');
     }
 
-    /* DIARY & PULL-UPS */
+    /* UNIFIED DIGITAL TRANSFORMATION DIARY (DAY 1 -> GOAL) */
     function saveDiaryEntry() {
       const note = document.getElementById('diaryNote').value.trim();
       const mood = document.getElementById('diaryMood').value;
       const videoUrl = document.getElementById('diaryVideoLink').value.trim();
+      const dateIso = document.getElementById('diaryDateInput').value || todayKey();
       if (!note && !videoUrl) return;
       state.diaryLog.unshift({
         id: Date.now(),
-        date: todayKey(),
-        label: shortDateLabel(todayKey()),
+        date: dateIso,
+        label: shortDateLabel(dateIso),
         mood,
         note,
         videoUrl
@@ -2974,31 +3076,146 @@
       document.getElementById('diaryNote').value = '';
       document.getElementById('diaryVideoLink').value = '';
       saveState();
-      renderDiary();
+      renderJourneyTimeline();
     }
 
     function deleteDiaryEntry(id) {
       state.diaryLog = state.diaryLog.filter(e => e.id !== id);
       saveState();
-      renderDiary();
+      renderJourneyTimeline();
     }
 
-    function renderDiary() {
-      const el = document.getElementById('diaryList');
-      if (!state.diaryLog.length) {
-        el.innerHTML = '<div style="font-size:12px; color:var(--muted);">No diary reflections saved yet. Start your Day 1 log above!</div>';
+    function buildUnifiedTimelineDays() {
+      const allDates = new Set();
+      (state.weightsLog || []).forEach(w => allDates.add(w.date));
+      Object.keys(state.stepsByDate || {}).forEach(d => allDates.add(d));
+      Object.keys(state.mealsByDate || {}).forEach(d => {
+        if ((state.mealsByDate[d] || []).length > 0) allDates.add(d);
+      });
+      (state.diaryLog || []).forEach(e => allDates.add(e.date));
+      (state.workoutArchiveLog || []).forEach(w => allDates.add(w.date));
+
+      const sortedAsc = Array.from(allDates).sort((a, b) => a.localeCompare(b));
+      if (!sortedAsc.length) return [];
+      const firstMs = new Date(sortedAsc[0] + 'T00:00:00').getTime();
+
+      return sortedAsc.map(iso => {
+        const curMs = new Date(iso + 'T00:00:00').getTime();
+        const dayNum = Math.round((curMs - firstMs) / (24 * 60 * 60 * 1000)) + 1;
+        const wt = (state.weightsLog || []).find(w => w.date === iso);
+        const steps = state.stepsByDate?.[iso];
+        const meals = state.mealsByDate?.[iso] || [];
+        const kcal = Math.round(meals.reduce((s, m) => s + Number(m.kcal || 0), 0));
+        const prot = Math.round(meals.reduce((s, m) => s + Number(m.protein || 0), 0));
+        const diaries = (state.diaryLog || []).filter(e => e.date === iso);
+        const archives = (state.workoutArchiveLog || []).filter(w => w.date === iso);
+
+        // Also include active unsaved lifts if this date is today and sets are entered
+        const activeTodayLifts = [];
+        if (iso === todayKey()) {
+          const day = state.activeDay;
+          PROGRAM[day].slots.forEach(slot => {
+            const opt = getActiveOption(slot);
+            const lift = state.lifts[opt.id];
+            if (lift && lift.reps.some(r => r !== '')) {
+              activeTodayLifts.push({
+                name: opt.name,
+                weight: lift.weight,
+                reps: lift.reps.filter(r => r !== '').join('/'),
+                feel: lift.feel === 'smooth' ? 'Smooth' : (lift.feel === 'hard' ? 'Hard' : 'Grind'),
+                note: lift.note || ''
+              });
+            }
+          });
+        }
+
+        return { iso, dayNum, label: shortDateLabel(iso), wt, steps, kcal, prot, diaries, archives, activeTodayLifts };
+      }).reverse(); // Most recent day at top
+    }
+
+    function renderJourneyTimeline() {
+      const el = document.getElementById('journeyTimeline');
+      const days = buildUnifiedTimelineDays();
+      if (!days.length) {
+        el.innerHTML = '<div class="card" style="font-size:12px; color:var(--muted);">Your journey story will build automatically as you log weights, workouts, meals, and reflections.</div>';
         return;
       }
-      el.innerHTML = state.diaryLog.map(e => `
-        <div class="diary-entry">
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:4px;">
-            <span style="font-weight:800; font-size:12px; color:var(--accent);">${e.label} • ${e.mood}</span>
-            <button class="btn btn-danger" style="padding:2px 7px; font-size:11px;" onclick="deleteDiaryEntry(${e.id})">✕</button>
+
+      el.innerHTML = days.map(d => {
+        const pills = [];
+        if (d.wt) pills.push(`<span class="tl-pill" style="color:var(--green); border-color:rgba(34,197,94,0.4);">⚖️ ${d.wt.kg} kg</span>`);
+        if (d.steps) pills.push(`<span class="tl-pill" style="color:var(--blue);">👟 ${Number(d.steps).toLocaleString()} steps</span>`);
+        if (d.kcal > 0) pills.push(`<span class="tl-pill">🔥 ${d.kcal} kcal • ${d.prot}g P</span>`);
+
+        const diaryHtml = d.diaries.map(entry => `
+          <div style="margin-bottom:6px; padding-bottom:6px; border-bottom:1px solid var(--border);">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+              <span style="font-size:11.5px; font-weight:800; color:var(--text);">${entry.mood}</span>
+              <button type="button" class="btn btn-danger" style="padding:2px 6px; font-size:10px;" onclick="deleteDiaryEntry(${entry.id})">✕</button>
+            </div>
+            ${entry.note ? `<div style="font-size:13px; color:var(--text); margin-top:3px;">${entry.note}</div>` : ''}
+            ${entry.videoUrl ? `<div style="margin-top:4px;"><a href="${entry.videoUrl}" target="_blank" rel="noopener" style="color:var(--blue); font-size:12px; font-weight:700;">🎥 Watch Form-Check / Progress Video ↗</a></div>` : ''}
           </div>
-          ${e.note ? `<div style="color:var(--text);">${e.note}</div>` : ''}
-          ${e.videoUrl ? `<div style="margin-top:4px;"><a href="${e.videoUrl}" target="_blank" rel="noopener" style="color:var(--blue); font-size:12px; font-weight:700;">🎥 Open Form-Check / Progress Video ↗</a></div>` : ''}
-        </div>
-      `).join('');
+        `).join('');
+
+        const archivedWorkoutHtml = d.archives.map(w => `
+          <div class="tl-lifts">
+            <div style="font-weight:800; color:var(--accent); margin-bottom:4px;">🏋️ ${w.dayTitle}</div>
+            ${w.exercises.map(ex => `
+              <div style="margin-bottom:3px;">
+                • <strong>${ex.name}</strong>: ${ex.weight} kg × ${ex.reps} <span style="color:var(--muted);">[${ex.feel}]</span>
+                ${ex.note ? `<span style="color:var(--blue); font-style:italic;"> — "${ex.note}"</span>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        `).join('');
+
+        const activeWorkoutHtml = d.activeTodayLifts.length ? `
+          <div class="tl-lifts">
+            <div style="font-weight:800; color:var(--blue); margin-bottom:4px;">🏋️ Current Session (${PROGRAM[state.activeDay].title})</div>
+            ${d.activeTodayLifts.map(ex => `
+              <div style="margin-bottom:3px;">
+                • <strong>${ex.name}</strong>: ${ex.weight} kg × ${ex.reps} <span style="color:var(--muted);">[${ex.feel}]</span>
+                ${ex.note ? `<span style="color:var(--accent); font-style:italic;"> — "${ex.note}"</span>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        ` : '';
+
+        return `
+          <div class="timeline-card">
+            <div class="tl-head">
+              <span class="tl-day-badge">DAY ${d.dayNum} • ${d.label} (${d.iso})</span>
+            </div>
+            ${pills.length ? `<div class="tl-pills">${pills.join('')}</div>` : ''}
+            ${diaryHtml}
+            ${archivedWorkoutHtml}
+            ${activeWorkoutHtml}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function copyFullStory() {
+      const days = buildUnifiedTimelineDays().reverse();
+      const lines = ['*ROHIT — RECOMP & 30 PULL-UPS DIGITAL DIARY*'];
+      days.forEach(d => {
+        lines.push(`\n*Day ${d.dayNum} (${d.label}):*`);
+        if (d.wt) lines.push(`- Fasted Weight: ${d.wt.kg} kg`);
+        if (d.steps) lines.push(`- Steps: ${Number(d.steps).toLocaleString()}`);
+        if (d.kcal > 0) lines.push(`- Nutrition: ${d.kcal} kcal | ${d.prot}g protein`);
+        d.diaries.forEach(e => {
+          lines.push(`- Journal [${e.mood}]: ${e.note}`);
+        });
+        d.archives.forEach(w => {
+          lines.push(`- Workout (${w.dayTitle}):`);
+          w.exercises.forEach(ex => {
+            lines.push(`  • ${ex.name}: ${ex.weight}kg × ${ex.reps} (${ex.feel})${ex.note ? ' — ' + ex.note : ''}`);
+          });
+        });
+      });
+      navigator.clipboard?.writeText(lines.join('\n'));
+      alert('Full Day 1 → Today transformation story copied to clipboard!');
     }
 
     function setPullupStage(id) {
@@ -3011,7 +3228,6 @@
       initDatePickers();
       renderRecentStepsChips();
       renderAllCharts();
-      renderDiary();
       document.getElementById('stageGrid').innerHTML = PULLUP_STAGES.map(s => `
         <div class="stage-card ${state.pullupStage === s.id ? 'active' : ''}" onclick="setPullupStage(${s.id})">
           <div style="font-weight:800; font-size:13px; color:${state.pullupStage === s.id ? 'var(--accent)' : 'var(--text)'};">${s.title}</div>
@@ -3033,7 +3249,7 @@
           selectedSwaps: state.selectedOptionBySlot,
           lifts: state.lifts
         };
-        const prompt = `You are Rohit's direct strength & recomp coach. Goal: 88.7kg -> 82.5kg by Feb 2027, and 30 strict pull-ups by Feb 28, 2028. Analyze his current logs (including whether lifts felt smooth vs hard/grind, steps, and macros) and give 3 crisp, actionable adjustments (no fluff): ${JSON.stringify(summary)}`;
+        const prompt = `You are Rohit's direct strength & recomp coach. Goal: 88.7kg -> 82.5kg by Feb 2027, and 30 strict pull-ups by Feb 28, 2028. Analyze his current logs (including whether lifts felt smooth vs hard/grind, written feedback, steps, and macros) and give 3 crisp, actionable adjustments (no fluff): ${JSON.stringify(summary)}`;
         const reply = await callGemini([{ text: prompt }]);
         out.textContent = reply;
       } catch (err) {
@@ -3095,6 +3311,7 @@
           renderIdealBlueprint();
           renderMeals();
           renderRecomp();
+          renderJourneyTimeline();
           closeSettings();
           alert('JSON Backup restored & merged!');
         } catch (e) {
