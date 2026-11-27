@@ -200,7 +200,7 @@
       color: var(--muted);
     }
 
-    /* Main Nav Tabs (5 Tabs: 3 top + 2 bottom on mobile, 5 across on desktop) */
+    /* Main Nav Tabs */
     .main-tabs {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1120,8 +1120,8 @@
     <section class="summary-grid">
       <div class="stat-card">
         <div class="stat-label">7-Day Rolling Avg</div>
-        <div class="stat-val" id="statWeight">87.2 kg</div>
-        <div class="stat-sub" id="statWeightSub">Start: 88.7 kg • Goal: 82.5 kg</div>
+        <div class="stat-val" id="statWeight">88.1 kg</div>
+        <div class="stat-sub" id="statWeightSub">Start: 88.7 kg (-0.6) • Goal: 82.5 kg</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Today's Calories</div>
@@ -1140,7 +1140,7 @@
       </div>
     </section>
 
-    <!-- Main Navigation (5 Clean Tabs: Log Food is instant, Ideal Plan is its own reference tab) -->
+    <!-- Main Navigation -->
     <nav class="main-tabs">
       <button class="main-tab active" data-tab="workout" onclick="switchMainTab('workout')">🏋️ Tracker</button>
       <button class="main-tab" data-tab="nutrition" onclick="switchMainTab('nutrition')">🥗 Log Food</button>
@@ -1162,7 +1162,7 @@
       <div class="card">
         <div class="section-head">
           <div>
-            <h2 class="section-title" id="dayTitle">Thursday — Upper (Strength & Pull-Up Volume)</h2>
+            <h2 class="section-title" id="dayTitle">Friday — Lower (Posterior Chain, Unilateral & Core)</h2>
             <p class="section-sub" id="dayFocus">Tap 🎙️ to dictate or type exercise feedback • Tap "✅ Finish & Save to Diary" after your session</p>
           </div>
           <div class="btn-row">
@@ -1181,7 +1181,7 @@
       <div id="exercisesContainer"></div>
     </main>
 
-    <!-- TAB 2: STREAMLINED FOOD LOGGER (NO SCROLLING NEEDED) -->
+    <!-- TAB 2: STREAMLINED FOOD LOGGER -->
     <main id="tab-nutrition" class="hidden">
       <div class="card">
         <div class="section-head">
@@ -1296,7 +1296,7 @@
             <label class="field-label" style="margin-top:0;">1. Morning Fasted Weight (kg)</label>
             <div class="checkin-row">
               <input id="weightDateInput" class="text-input" type="date" />
-              <input id="weightInput" class="text-input" type="number" inputmode="decimal" step="0.1" placeholder="87.2" />
+              <input id="weightInput" class="text-input" type="number" inputmode="decimal" step="0.1" placeholder="88.1" />
             </div>
             <button type="button" class="btn btn-primary" style="width:100%;" onclick="logWeight()">Log Weight for Date</button>
           </div>
@@ -1343,7 +1343,7 @@
         <div class="chart-card">
           <div class="chart-header">
             <span class="chart-title">⚖️ Fasted Bodyweight Trend</span>
-            <span class="chart-kpi" id="weightChartKpi">87.2 kg</span>
+            <span class="chart-kpi" id="weightChartKpi">88.1 kg</span>
           </div>
           <div class="svg-wrap" id="chartWeightWrap"></div>
         </div>
@@ -1413,7 +1413,7 @@
           <input id="diaryVideoLink" class="text-input" placeholder="Optional Google Photos / Drive form-check video URL" />
         </div>
 
-        <textarea id="diaryNote" class="textarea" style="min-height:72px;" placeholder="Speak or write today's story (e.g., Day 13 — Hit 87.2 kg fasted, bench felt smooth at 20kg, hit 10k steps)..."></textarea>
+        <textarea id="diaryNote" class="textarea" style="min-height:72px;" placeholder="Speak or write today's story (e.g., Day 14 — Bench felt smooth at 20kg, hit 10k steps)..."></textarea>
         <div class="btn-row">
           <button type="button" id="micDiaryBtn" class="btn btn-mic" onclick="toggleDictation('diaryNote', 'micDiaryBtn', 'diaryVoiceStatus')">🎙️ Dictate Diary (Voice)</button>
           <button type="button" class="btn btn-primary" onclick="saveDiaryEntry()">+ Add Reflection to Diary</button>
@@ -1486,7 +1486,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = 'progressive_lift_os_v11';
+    const STORAGE_KEY = 'progressive_lift_os_v12';
     const CLOUD_CFG_KEY = 'progressive_lift_cloud_cfg_v1';
 
     const IDEAL_BLUEPRINTS = [
@@ -1833,8 +1833,8 @@
             slotId: 'fri_ex1', pattern: 'Primary Posterior Hinge', minReps: 8, maxReps: 10, rest: '150s',
             note: 'Keep bar/DBs close to shins',
             options: [
-              { id: 'fri_ex1', name: 'Barbell RDL / Trap Bar (Per Side)', defaultWt: 30 },
-              { id: 'fri_ex1_alt1', name: 'Dumbbell RDL (Per Hand)', defaultWt: 22.5 },
+              { id: 'fri_ex1', name: 'Barbell RDL / Trap Bar (Per Side)', defaultWt: 25 },
+              { id: 'fri_ex1_alt1', name: 'Dumbbell RDL (Per Hand)', defaultWt: 20 },
               { id: 'fri_ex1_alt2', name: 'Barbell Hip Thrust (Per Side)', defaultWt: 30 }
             ]
           },
@@ -1842,7 +1842,7 @@
             slotId: 'fri_ex2', pattern: 'Secondary Squat / Quad', minReps: 8, maxReps: 12, rest: '150s',
             note: 'Upright torso quad focus',
             options: [
-              { id: 'fri_ex2', name: 'Hack Squat / Front Squat (Per Side)', defaultWt: 25 },
+              { id: 'fri_ex2', name: 'Hack Squat / Front Squat (Per Side)', defaultWt: 20 },
               { id: 'fri_ex2_alt1', name: 'Leg Extension Machine', defaultWt: 45 },
               { id: 'fri_ex2_alt2', name: 'Close-Stance Leg Press', defaultWt: 110 }
             ]
@@ -1851,14 +1851,14 @@
             slotId: 'fri_ex3', pattern: 'Unilateral Single-Leg', minReps: 10, maxReps: 12, rest: '120s',
             note: 'Reps per leg',
             options: [
-              { id: 'fri_ex3', name: 'Bulgarian Split Squat / Walking Lunge', defaultWt: 36 },
+              { id: 'fri_ex3', name: 'Bulgarian Split Squat / Walking Lunge', defaultWt: 20 },
               { id: 'fri_ex3_alt1', name: 'Reverse DB Lunges (Per Hand)', defaultWt: 12.5 },
               { id: 'fri_ex3_alt2', name: 'Step-Ups (Controlled Negative)', defaultWt: 10 }
             ]
           },
           {
-            slotId: 'fri_ex4', pattern: 'Lower Ab / Pelvic Control', minReps: 10, maxReps: 15, rest: '90s',
-            note: 'Curl pelvis up, no swinging',
+            slotId: 'fri_ex4', pattern: 'Lower Ab / Quad Finisher', minReps: 10, maxReps: 15, rest: '90s',
+            note: 'Controlled tempo, full contraction',
             options: [
               { id: 'fri_ex4', name: 'Hanging Knee / Leg Raises', defaultWt: 5 },
               { id: 'fri_ex4_alt1', name: 'Captain’s Chair Leg Raises', defaultWt: 0 },
@@ -1884,19 +1884,20 @@
       { id: 4, title: 'Stage 4: Strict Unassisted', desc: '1–3 → 8 → 15 → 30 strict pull-ups (Feb 28, 2028 target)' }
     ];
 
+    /* Pre-seeded with your Nov 27, 2026 JSON backup */
     const SEED_STATE = {
-      updatedAt: 1795680000000,
+      updatedAt: 1795798814923,
       apiKey: '',
       model: 'gemini-3.5-flash-lite',
       targets: { kcal: 2300, protein: 185, goalWeight: 82.5 },
       mainTab: 'workout',
-      activeDay: 'thu',
+      activeDay: 'fri',
       pullupStage: 4,
       fatBonus: 0,
       selectedBlueprintId: 'bp_chicken_home',
       weightsLog: [
         { date: '2026-11-14', label: 'Nov 14', kg: 88.7 },
-        { date: '2026-11-26', label: 'Nov 26', kg: 87.2 }
+        { date: '2026-11-26', label: 'Nov 26', kg: 88.1 }
       ],
       stepsByDate: {
         '2026-11-25': 13215
@@ -1921,10 +1922,36 @@
         '2026-11-26': [
           { id: 1795668491027, name: '1 Scoop Whey + Water', kcal: 120, protein: 24, carbs: 3, fat: 1.5 },
           { id: 1795668495871, name: '4 Whole Boiled Eggs', kcal: 310, protein: 25, carbs: 2, fat: 21 },
-          { id: 1795678030798, name: 'Rice, roti, aloo gobi sabzi, dal/kadhi, cucumber, and onion', kcal: 590, protein: 14, carbs: 95, fat: 17 }
+          { id: 1795678030798, name: 'Rice, roti, aloo gobi sabzi, dal/kadhi, cucumber, and onion', kcal: 590, protein: 14, carbs: 95, fat: 17 },
+          { id: 1795690677810, name: '2 Milk No Maida Bread with Peanut Butter Chocolate Crunchy', kcal: 380, protein: 12, carbs: 42, fat: 19 },
+          { id: 1795694082590, name: '1 strong coffee less sugar', kcal: 45, protein: 2, carbs: 6, fat: 1 },
+          { id: 1795703597099, name: 'Chapati Kadhi Alu Matar Grilled Chicken', kcal: 670, protein: 42, carbs: 64, fat: 27 }
+        ],
+        '2026-11-27': [
+          { id: 1795755371492, name: 'Nakpro Whey Protein (1 scoops)', kcal: 120, protein: 24, carbs: 3, fat: 2 },
+          { id: 1795755383998, name: 'Sugarcane Juice', kcal: 270, protein: 2, carbs: 66, fat: 0 },
+          { id: 1795764731923, name: 'Chapati, Egg Curry, Dal, and Cucumber', kcal: 550, protein: 24, carbs: 65, fat: 21 },
+          { id: 1795776867108, name: 'Milk Bread with Peanut Butter', kcal: 310, protein: 11, carbs: 42, fat: 12 },
+          { id: 1795789357843, name: 'Rice with Dal and Egg Curry', kcal: 620, protein: 24, carbs: 78, fat: 23 }
         ]
       },
       diaryLog: [
+        {
+          id: 1795755198473,
+          date: '2026-11-27',
+          label: 'Nov 27',
+          mood: '⚡ Hard Push / Sore',
+          note: "Today's workout was like a real workout—my legs were burning and I was tired in the middle of the set. I struggled when it came to Bulgarian squats and was not able to finish properly (think we should have something more than just coffee for pre-workout). After that, leg extensions and calf raises finished strong. I was so exhausted I briefly felt dizzy, and my left eye felt weird/twitching, so I had fresh sugarcane juice right after.",
+          videoUrl: ''
+        },
+        {
+          id: 1795754903558,
+          date: '2026-11-26',
+          label: 'Nov 26',
+          mood: '✅ Steady / Normal Day',
+          note: 'Corrected baseline check: 87.2 was an entry typo—weight was 88.2 kg and now 88.1 kg (-0.6 kg from start).',
+          videoUrl: ''
+        },
         {
           id: 1794600000001,
           date: '2026-11-14',
@@ -1932,27 +1959,31 @@
           mood: '🔥 Smooth & Locked In',
           note: 'Day 1 baseline logged at 88.7 kg. Starting Phase 1 recomp toward 82.5 kg and 30 strict pull-ups.',
           videoUrl: ''
-        },
-        {
-          id: 1795679000002,
-          date: '2026-11-26',
-          label: 'Nov 26',
-          mood: '🔥 Smooth & Locked In',
-          note: 'Down to 87.2 kg (-1.5 kg from start)! Completed Mon–Thu sessions cleanly and hit 13,215 steps yesterday.',
-          videoUrl: ''
         }
       ],
       workoutArchiveLog: [],
       selectedOptionBySlot: {
-        wed_ex5: 'wed_custom_1795579816694'
+        wed_ex5: 'wed_custom_1795579816694',
+        fri_ex1: 'fri_ex1_alt1',
+        fri_ex4: 'fri_ex4_cust_1795752648269'
       },
-      customOptionsBySlot: {},
+      customOptionsBySlot: {
+        fri_ex4: [
+          {
+            id: 'fri_ex4_cust_1795752648269',
+            name: 'Leg extension',
+            defaultWt: 40,
+            isCustom: true
+          }
+        ]
+      },
       checks: {
         mon_w1: true, mon_w2: true, mon_w3: true, mon_w4: true,
         mon_c1: true, mon_c2: true, mon_c3: true, mon_c4: true,
         tue_w1: true, tue_w2: true, tue_w3: true, tue_c1: true, tue_c2: true,
         wed_w1: true, wed_w2: true, wed_w3: true, wed_c1: true, wed_c2: true,
-        thu_w1: true, thu_w2: true, thu_c1: true, thu_c2: true
+        thu_w1: true, thu_w2: true, thu_c1: true, thu_c2: true,
+        fri_w1: true, fri_w2: true
       },
       lifts: {
         mon_ex1: { weight: 20, reps: ['12', '10', '8'], feel: 'smooth', note: '', history: [] },
@@ -1978,10 +2009,12 @@
         thu_ex3: { weight: 15, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
         thu_ex4: { weight: 15, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
         thu_ex5: { weight: 25, reps: ['12', '12', '12'], feel: 'smooth', note: '', history: [] },
-        fri_ex1: { weight: 30, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
-        fri_ex2: { weight: 25, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
-        fri_ex3: { weight: 36, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
+        fri_ex1: { weight: 25, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
+        fri_ex1_alt1: { weight: 20, reps: ['15', '15', '15'], feel: 'smooth', note: 'Went smooth but I was in doubt if I am bending my knee too much or should I go deep?', history: [] },
+        fri_ex2: { weight: 20, reps: ['12', '12', '12'], feel: 'smooth', note: 'It was tiring and I think this machine does not allow you to go deep like ground touch', history: [] },
+        fri_ex3: { weight: 20, reps: ['12', '12', '9'], feel: 'grind', note: "I don't know why but today it was difficult to hit the Bulgarian squats—I was struggling to finish the set and last set was only 9 reps", history: [] },
         fri_ex4: { weight: 5, reps: ['', '', ''], feel: 'smooth', note: '', history: [] },
+        fri_ex4_cust_1795752648269: { weight: 40, reps: ['15', '15', '15'], feel: 'hard', note: 'It took me out—it was not that difficult, last reps were half reps', history: [] },
         fri_ex5: { weight: 60, reps: ['', '', ''], feel: 'smooth', note: '', history: [] }
       }
     };
@@ -2044,6 +2077,16 @@
       });
       const mergedArchive = Object.values(mergedArchiveMap).sort((a, b) => b.id - a.id);
 
+      const mergedCustomSlots = { ...(base.customOptionsBySlot || {}) };
+      Object.entries(incoming.customOptionsBySlot || {}).forEach(([slotId, opts]) => {
+        const existingIds = new Set((mergedCustomSlots[slotId] || []).map(o => o.id));
+        const combined = [...(mergedCustomSlots[slotId] || [])];
+        (opts || []).forEach(o => {
+          if (!existingIds.has(o.id)) combined.push(o);
+        });
+        mergedCustomSlots[slotId] = combined;
+      });
+
       return {
         ...base,
         ...incoming,
@@ -2055,7 +2098,7 @@
         diaryLog: mergedDiary,
         workoutArchiveLog: mergedArchive,
         selectedOptionBySlot: { ...(base.selectedOptionBySlot || {}), ...(incoming.selectedOptionBySlot || {}) },
-        customOptionsBySlot: { ...(base.customOptionsBySlot || {}), ...(incoming.customOptionsBySlot || {}) },
+        customOptionsBySlot: mergedCustomSlots,
         checks: { ...(base.checks || {}), ...(incoming.checks || {}) },
         lifts: { ...(base.lifts || {}), ...(incoming.lifts || {}) }
       };
@@ -2064,6 +2107,7 @@
     function loadState() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY)
+          || localStorage.getItem('progressive_lift_os_v11')
           || localStorage.getItem('progressive_lift_os_v10')
           || localStorage.getItem('progressive_lift_os_v9')
           || localStorage.getItem('progressive_lift_os_v8')
@@ -2271,7 +2315,7 @@
     /* 7-DAY CALENDAR ROLLING AVERAGE */
     function computeRolling7DayWeight() {
       const sorted = [...state.weightsLog].sort((a, b) => a.date.localeCompare(b.date));
-      if (!sorted.length) return { avg: 87.2, latest: 87.2, start: 88.7 };
+      if (!sorted.length) return { avg: 88.1, latest: 88.1, start: 88.7 };
       const latestEntry = sorted[sorted.length - 1];
       const startEntry = sorted[0];
 
@@ -3150,7 +3194,7 @@
         label: shortDateLabel(w.date),
         val: Number(w.kg)
       }));
-      const latestWt = wtPts.length ? wtPts[wtPts.length - 1].val : 87.2;
+      const latestWt = wtPts.length ? wtPts[wtPts.length - 1].val : 88.1;
       document.getElementById('weightChartKpi').textContent = `${latestWt} kg → ${state.targets.goalWeight} kg`;
       document.getElementById('chartWeightWrap').innerHTML = renderLineSvg(wtPts, Number(state.targets.goalWeight), 'kg', '#22c55e');
 
@@ -3533,7 +3577,7 @@
     initFoodDb();
     initDatePickers();
     updateSummaryBar();
-    switchDay(state.activeDay || 'thu');
+    switchDay(state.activeDay || 'fri');
     switchMainTab(state.mainTab || 'workout');
     syncWithGist(false);
   </script>
